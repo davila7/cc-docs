@@ -1,0 +1,50 @@
+# Summary
+
+*   [Introduction](introduction.md)
+*   **Chapter 1: Getting Started**
+    *   [Overview](chapter-1-getting-started/1-overview.md)
+    *   [Installation and Setup](chapter-1-getting-started/2-installation-and-setup.md)
+    *   [Quickstart](chapter-1-getting-started/3-quickstart.md)
+    *   [Authentication](chapter-1-getting-started/4-authentication.md)
+    *   [Basic Configuration](chapter-1-getting-started/5-basic-configuration.md)
+    *   [CLI Reference](chapter-1-getting-started/6-cli-reference.md)
+*   **Chapter 2: Core Concepts and Common Workflows**
+    *   [Interactive Mode](chapter-2-core-concepts-and-common-workflows/1-interactive-mode.md)
+    *   [Slash Commands](chapter-2-core-concepts-and-common-workflows/2-slash-commands.md)
+    *   [Common Workflows](chapter-2-core-concepts-and-common-workflows/3-common-workflows.md)
+    *   [Memory Management](chapter-2-core-concepts-and-common-workflows/4-memory-management.md)
+    *   [Subagents](chapter-2-core-concepts-and-common-workflows/5-subagents.md)
+    *   [MCP](chapter-2-core-concepts-and-common-workflows/6-mcp.md)
+*   **Chapter 3: Advanced Features and SDK**
+    *   [Hooks](chapter-3-advanced-features-and-sdk/1-hooks.md)
+    *   [Output Styles](chapter-3-advanced-features-and-sdk/2-output-styles.md)
+    *   [SDK Overview](chapter-3-advanced-features-and-sdk/3-sdk-overview.md)
+    *   [Headless Mode](chapter-3-advanced-features-and-sdk/4-headless-mode.md)
+    *   [Python SDK](chapter-3-advanced-features-and-sdk/5-python-sdk.md)
+    *   [TypeScript SDK](chapter-3-advanced-features-and-sdk/6-typescript-sdk.md)
+    *   [GitHub Actions](chapter-3-advanced-features-and-sdk/7-github-actions.md)
+    *   [Deployment](chapter-3-advanced-features-and-sdk/8-deployment.md)
+    *   [Administration](chapter-3-advanced-features-and-sdk/9-administration.md)
+    *   [Troubleshooting](chapter-3-advanced-features-and-sdk/10-troubleshooting.md)
+*   **Chapter 4: Best practices for using Claude Code in the console**
+    *   [Introduction](chapter-4-best-practices/1-introduction.md)
+    *   [Effective Prompting](chapter-4-best-practices/2-effective-prompting.md)
+    *   [Working with Files](chapter-4-best-practices/3-working-with-files.md)
+    *   [Shell Commands](chapter-4-best-practices/4-shell-commands.md)
+    *   [Debugging with Claude](chapter-4-best-practices/5-debugging-with-claude.md)
+*   **Chapter 5: Custom configuration per project**
+    *   [Introduction](chapter-5-custom-configuration/1-introduction.md)
+    *   [Project Settings](chapter-5-custom-configuration/2-project-settings.md)
+    *   [Custom Slash Commands](chapter-5-custom-configuration/3-custom-slash-commands.md)
+    *   [Custom Subagents](chapter-5-custom-configuration/4-custom-subagents.md)
+    *   [MCP Integration](chapter-5-custom-configuration/5-mcp-integration.md)
+*   **Chapter 6: Creating workflows and software development flows adapted to AI tools in the console**
+    *   [Introduction](chapter-6-workflows-and-automation/1-introduction.md)
+    *   [Automated Testing Workflows](chapter-6-workflows-and-automation/2-automated-testing-workflows.md)
+    *   [Automated Documentation Workflows](chapter-6-workflows-and-automation/3-automated-documentation-workflows.md)
+    *   [Automated Refactoring Workflows](chapter-6-workflows-and-automation/4-automated-refactoring-workflows.md)
+    *   [Claude Code Templates (aitmpl)](chapter-6-workflows-and-automation/5-claude-code-templates-aitmpl.md)
+*   **Chapter 7: Conclusions and the future of this type of development**
+    *   [Summary of Claude Code](chapter-7-conclusions-and-future/1-summary-of-claude-code.md)
+    *   [The Future of AI in Software Development](chapter-7-conclusions-and-future/2-the-future-of-ai-in-software-development.md)
+    *   [Conclusion](chapter-7-conclusions-and-future/3-conclusion.md)
