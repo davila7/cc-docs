@@ -1,0 +1,40 @@
+{
+  "name": "claude-code-agents-hooks-advanced",
+  "version": "1.0.0",
+  "description": "Advanced integration patterns for Claude Code agents and hooks",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "validate": "npm run lint && npm run test",
+    "demo:agents": "node scripts/demo-agents.js",
+    "demo:hooks": "node scripts/demo-hooks.js",
+    "demo:workflows": "node scripts/demo-workflows.js",
+    "setup": "node scripts/setup.js"
+  },
+  "keywords": [
+    "claude-code",
+    "agents",
+    "hooks",
+    "ai-assisted-development",
+    "workflow-automation"
+  ],
+  "author": "Technical Documentation Engineer",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "@types/node": "^18.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "inquirer": "^9.0.0",
+    "fs-extra": "^11.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
