@@ -17,19 +17,7 @@ The **Docusaurus Expert Agent** analyzes code changes and automatically:
 
 ## Agent flow in the workflow
 
-```mermaid
-graph TD
-    A[Code changes] --> B[GitHub Actions runs]
-    B --> C[Docusaurus Expert activates]
-    C --> D[Analyzes changes]
-    D --> E[Generates/updates docs]
-    E --> F[Creates documentation PR]
-    F --> G[Notifies Discord]
-
-    style C fill:#e1f5fe
-    style E fill:#f3e5f5
-    style F fill:#e8f5e8
-```
+<img width="619" height="397" alt="Screenshot 2025-09-27 at 16 46 50" src="https://github.com/user-attachments/assets/21af30e2-844c-4481-b246-ea94b355aeeb" />
 
 ## Installation
 
