@@ -19,29 +19,7 @@ This tutorial provides step-by-step instructions for implementing intelligent do
 
 ## Architecture Overview
 
-<div style={{textAlign: 'center', margin: '2rem 0'}}>
-  <img
-    width="800"
-    height="auto"
-    alt="Claude Code Documentation Studio - Advanced Integration Patterns Architecture"
-    src="https://github.com/user-attachments/assets/1a7da389-d423-4cdc-a451-b380851f08d"
-    style={{
-      borderRadius: '12px',
-      boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-      border: '1px solid var(--ifm-color-emphasis-200)',
-      maxWidth: '100%',
-      height: 'auto'
-    }}
-  />
-  <p style={{
-    fontStyle: 'italic',
-    color: 'var(--ifm-color-emphasis-700)',
-    marginTop: '1rem',
-    fontSize: '0.9rem'
-  }}>
-    Architecture overview of Claude Code advanced integration patterns with subagents, hooks, and workflow automation
-  </p>
-</div>
+<img width="683" height="466" alt="Screenshot 2025-09-27 at 16 56 05" src="https://github.com/user-attachments/assets/586a21a9-3242-4db8-81fe-abaf6e430ec1" />
 
 ## Prerequisites
 
