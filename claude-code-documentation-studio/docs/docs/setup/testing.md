@@ -2,102 +2,143 @@
 sidebar_position: 5
 ---
 
-# End-to-End Testing Guide
+# Testing del Sistema
 
-> Complete testing workflow to verify your automated documentation system works correctly from code changes to Discord notifications.
+> Prueba completa del sistema de documentación automática desde cambios de código hasta notificaciones en Discord.
 
-## Overview
+## ¿Qué vamos a probar?
 
-This guide walks you through testing the complete documentation automation pipeline:
+El flujo completo:
+1. **Cambio de código** → 2. **PR creado** → 3. **Workflow ejecuta** → 4. **Agente actualiza docs** → 5. **PR docs creado** → 6. **Discord notifica**
 
-1. **Code Change** → 2. **PR Creation** → 3. **Agent Execution** → 4. **Documentation Update** → 5. **Discord Notification**
+## Pre-requisitos
 
-## Prerequisites Checklist
+Antes de probar, verifica que tienes configurado:
 
-Before testing, verify you have completed:
+- ✅ **Agente Docusaurus Expert** instalado
+- ✅ **Workflow de GitHub Actions** creado
+- ✅ **Secretos configurados** (ANTHROPIC_API_KEY, DISCORD_WEBHOOK_URL)
+- ✅ **Permisos de GitHub Actions** habilitados
 
-- ✅ [Docusaurus Expert Agent](/docs/subagents/agent-case-1) installed
-- ✅ [Discord Notification Hook](/docs/hooks/hook-case-1) configured
-- ✅ [GitHub Actions Workflow](/docs/workflows/cicd-workflow) deployed
-- ✅ [Discord Webhook](/docs/setup/discord-setup) set up
+## Prueba 1: Test completo
 
-## Test Scenario 1: New Feature Documentation
+### 1. Crear función de ejemplo
 
-This test simulates adding a new feature to your codebase and verifying that documentation is automatically generated.
+Crea un archivo nuevo con una función documentada:
 
-### Step 1: Create Test Feature
-
-Create a new feature file that should trigger documentation updates:
-
-```bash
-# Navigate to your project root
-cd your-project
-
-# Create a new feature file
-mkdir -p src/features
-cat > src/features/userProfile.js << 'EOF'
+```javascript title="src/userApi.js"
 /**
- * User Profile Management API
- * @description Handles user profile operations including avatar upload and data management
- * @author Claude Code Documentation Studio
- */
-
-/**
- * Retrieves the current user's profile information
- * @route GET /api/users/profile
- * @param {string} userId - The user ID to fetch profile for
- * @param {Object} options - Additional options for profile retrieval
- * @param {boolean} options.includeAvatar - Whether to include avatar URL
- * @param {boolean} options.includePreferences - Whether to include user preferences
- * @returns {Promise<Object>} User profile data
- * @example
- * const profile = await getUserProfile('user123', { includeAvatar: true });
- * console.log(profile.username); // 'john_doe'
+ * Obtiene información del perfil de usuario
+ * @param {string} userId - ID del usuario
+ * @param {Object} options - Opciones adicionales
+ * @param {boolean} options.includeAvatar - Incluir URL del avatar
+ * @returns {Promise<Object>} Datos del perfil del usuario
  */
 export async function getUserProfile(userId, options = {}) {
-  const { includeAvatar = false, includePreferences = false } = options;
+  const { includeAvatar = false } = options;
 
   try {
-    const response = await fetch(`/api/users/${userId}/profile`, {
-      method: 'GET',
+    const response = await fetch(`/api/users/${userId}`, {
       headers: {
-        'Authorization': `Bearer ${getAuthToken()}`,
+        'Authorization': `Bearer ${getToken()}`,
         'Content-Type': 'application/json'
       }
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch profile: ${response.statusText}`);
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const userData = await response.json();
 
     return {
-      id: data.id,
-      username: data.username,
-      email: data.email,
-      ...(includeAvatar && { avatarUrl: data.avatar_url }),
-      ...(includePreferences && { preferences: data.preferences })
+      id: userData.id,
+      username: userData.username,
+      email: userData.email,
+      ...(includeAvatar && { avatar: userData.avatar_url })
     };
   } catch (error) {
-    console.error('Error fetching user profile:', error);
+    console.error('Error obteniendo perfil:', error);
     throw error;
   }
 }
 
+function getToken() {
+  return localStorage.getItem('authToken');
+}
+```
+
+### 2. Crear PR para activar workflow
+
+```bash
+# Crear rama nueva
+git checkout -b feature/user-profile-api
+
+# Agregar archivo
+git add src/userApi.js
+
+# Commit con mensaje descriptivo
+git commit -m "feat: add getUserProfile API function
+
+- Obtiene información del perfil de usuario
+- Soporte para incluir avatar opcional
+- Manejo de errores robusto
+- Autenticación con Bearer token"
+
+# Push a GitHub
+git push origin feature/user-profile-api
+
+# Crear PR (usando GitHub CLI o web interface)
+gh pr create \
+  --title "✨ Add User Profile API" \
+  --body "Nueva API para obtener perfiles de usuario con soporte para avatar opcional"
+```
+
+### 3. Monitorear ejecución
+
+1. **Ve a GitHub Actions** en tu repositorio
+2. **Busca** el workflow "Documentación Automática"
+3. **Haz click** en la ejecución en progreso
+4. **Observa cada paso**:
+   - ✅ Checkout repository
+   - ✅ Instalar agente
+   - ✅ Crear hook Discord
+   - ✅ Detectar cambios
+   - ✅ Ejecutar agente
+   - ✅ Crear PR
+   - ✅ Notificar Discord
+
+### 4. Verificar resultados
+
+**Documentación creada:**
+- Nuevo PR con título "📚 Docs actualizadas automáticamente"
+- Archivo de documentación para la API (ej: `docs/api/user-profile.md`)
+- Ejemplos de código y descripción de parámetros
+
+**Notificación Discord:**
+- Mensaje con embed rico en tu canal
+- Lista de archivos cambiados
+- Link al PR de documentación
+
+## Prueba 2: Actualización de función existente
+
+### 1. Modificar función existente
+
+```javascript title="src/userApi.js"
+// Agregar al final del archivo
 /**
- * Updates user profile information
- * @route PUT /api/users/profile
- * @param {string} userId - The user ID to update
- * @param {Object} profileData - Updated profile data
- * @param {string} profileData.username - New username
- * @param {string} profileData.email - New email address
- * @param {File} profileData.avatar - New avatar file (optional)
- * @returns {Promise<Object>} Updated profile data
+ * Actualiza el perfil de usuario
+ * @param {string} userId - ID del usuario
+ * @param {Object} profileData - Datos a actualizar
+ * @param {string} profileData.username - Nuevo nombre de usuario
+ * @param {string} profileData.email - Nuevo email
+ * @param {File} profileData.avatar - Nueva imagen de avatar
+ * @returns {Promise<Object>} Perfil actualizado
  */
 export async function updateUserProfile(userId, profileData) {
   const formData = new FormData();
 
+  // Agregar datos al FormData
   Object.keys(profileData).forEach(key => {
     if (profileData[key] !== undefined) {
       formData.append(key, profileData[key]);
@@ -105,367 +146,194 @@ export async function updateUserProfile(userId, profileData) {
   });
 
   try {
-    const response = await fetch(`/api/users/${userId}/profile`, {
+    const response = await fetch(`/api/users/${userId}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${getAuthToken()}`
+        'Authorization': `Bearer ${getToken()}`
       },
       body: formData
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to update profile: ${response.statusText}`);
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error updating user profile:', error);
+    console.error('Error actualizando perfil:', error);
     throw error;
   }
 }
-
-function getAuthToken() {
-  return localStorage.getItem('authToken') || '';
-}
-EOF
-
-echo "✅ Test feature file created: src/features/userProfile.js"
 ```
 
-### Step 2: Create Feature Branch and Commit
+### 2. Commitear cambio
 
 ```bash
-# Create feature branch
-git checkout -b feature/user-profile-api
+# Agregar cambios
+git add src/userApi.js
 
-# Add and commit the new feature
-git add src/features/userProfile.js
-git commit -m "feat(api): add user profile management with avatar upload
+# Commit
+git commit -m "feat: add updateUserProfile function
 
-- Add getUserProfile() function with configurable options
-- Add updateUserProfile() function with FormData support
-- Include proper error handling and authentication
-- Support avatar upload via multipart form data
-- Add comprehensive JSDoc documentation"
+- Permite actualizar datos del perfil
+- Soporte para subir avatar
+- Usa FormData para multipart upload"
 
-# Push feature branch
+# Push
 git push origin feature/user-profile-api
 ```
 
-### Step 3: Create Pull Request
+### 3. Verificar actualización
 
-Create a pull request to trigger the documentation workflow:
+El workflow debería:
+- Detectar el cambio en `src/userApi.js`
+- Actualizar la documentación existente
+- Agregar la nueva función a la documentación
+- Mantener formato consistente
 
-```bash
-# Create PR using GitHub CLI (if available)
-gh pr create \
-  --title "✨ Add User Profile Management API" \
-  --body "## New Feature: User Profile API
+## Prueba 3: Verificar exclusiones
 
-This PR introduces comprehensive user profile management functionality:
-
-### Added Functions:
-- \`getUserProfile(userId, options)\` - Retrieve user profile data
-- \`updateUserProfile(userId, profileData)\` - Update profile with avatar support
-
-### Key Features:
-- 🔐 Authentication required for all operations
-- 📸 Avatar upload support via FormData
-- ⚙️ Configurable profile data inclusion
-- 🛡️ Comprehensive error handling
-- 📚 Full JSDoc documentation
-
-### API Endpoints:
-- \`GET /api/users/{userId}/profile\` - Fetch profile
-- \`PUT /api/users/{userId}/profile\` - Update profile
-
-This should trigger our automated documentation workflow to create corresponding documentation updates."
-```
-
-Alternatively, create the PR through GitHub's web interface.
-
-### Step 4: Monitor Workflow Execution
-
-Once the PR is created, monitor the GitHub Actions workflow:
-
-1. **Navigate to Actions tab** in your GitHub repository
-2. **Find the "Docusaurus Documentation Automation" workflow**
-3. **Click on the running workflow** to view detailed logs
-
-#### Expected Workflow Steps:
-
-```
-✅ Checkout repository
-✅ Setup Claude configuration
-✅ Create Discord notification hook
-✅ Get changed files
-✅ Update documentation (Claude Code agent execution)
-✅ Create Pull Request
-✅ Send Discord notification
-✅ Workflow Summary
-```
-
-### Step 5: Verify Documentation PR
-
-The workflow should create a new documentation PR:
-
-1. **Check for new PR** with title "📚 Documentation Update - Automated"
-2. **Review the PR description** which should list your changed files
-3. **Examine the documentation changes** created by the agent
-
-#### Expected Documentation Updates:
-
-- New API documentation file (e.g., `docs/api/user-profile.md`)
-- Updated navigation/sidebar if needed
-- Code examples matching your implementation
-- Proper API reference format
-
-### Step 6: Check Discord Notification
-
-Verify the Discord notification was sent:
-
-1. **Check your Discord channel** for the documentation bot message
-2. **Verify the embed contains:**
-   - PR title and link
-   - Changed files list
-   - Direct link to review the documentation PR
-   - Proper formatting and colors
-
-## Test Scenario 2: API Endpoint Update
-
-Test how the system handles updates to existing functionality.
-
-### Step 1: Modify Existing Function
-
-Update the user profile function to add new parameters:
+### 1. Cambio que NO debe activar workflow
 
 ```bash
-# Edit the existing function
-cat >> src/features/userProfile.js << 'EOF'
+# Cambiar solo documentación (debe ser ignorado)
+echo "# Cambio en docs" >> docs/readme.md
+git add docs/readme.md
+git commit -m "docs: update readme"
+git push
 
-/**
- * Deletes a user profile
- * @route DELETE /api/users/profile
- * @param {string} userId - The user ID to delete
- * @param {Object} options - Deletion options
- * @param {boolean} options.permanentDelete - Whether to permanently delete or soft delete
- * @param {string} options.reason - Reason for deletion (required for permanent deletion)
- * @returns {Promise<Object>} Deletion confirmation
- */
-export async function deleteUserProfile(userId, options = {}) {
-  const { permanentDelete = false, reason } = options;
-
-  if (permanentDelete && !reason) {
-    throw new Error('Reason is required for permanent deletion');
-  }
-
-  try {
-    const response = await fetch(`/api/users/${userId}/profile`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${getAuthToken()}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        permanent: permanentDelete,
-        reason: reason
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to delete profile: ${response.statusText}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error deleting user profile:', error);
-    throw error;
-  }
-}
-EOF
+# Cambiar configuración (debe ser ignorado si está en exclusiones)
+echo "// comentario" >> package.json
+git add package.json
+git commit -m "chore: update package.json"
+git push
 ```
 
-### Step 2: Commit and Test Workflow
+### 2. Verificar que NO se ejecuta
+
+- No debe aparecer nuevo workflow en GitHub Actions
+- No debe crearse PR de documentación
+- No debe enviarse notificación a Discord
+
+## Validación de calidad
+
+### ✅ Checklist de éxito
+
+**Agente funcionando:**
+- [ ] Detecta nuevas funciones automáticamente
+- [ ] Crea documentación con formato correcto
+- [ ] Incluye ejemplos de código funcionales
+- [ ] Mantiene estructura de navegación actualizada
+
+**Workflow robusto:**
+- [ ] Se ejecuta solo con tipos de archivo correctos
+- [ ] Maneja errores sin fallar completamente
+- [ ] Crea PRs con información descriptiva
+- [ ] Excluye cambios en documentación para evitar loops
+
+**Discord notificaciones:**
+- [ ] Llegan mensajes a canal correcto
+- [ ] Formato de embed es claro y útil
+- [ ] Incluye links funcionales al PR
+- [ ] No spam excesivo de notificaciones
+
+**Documentación generada:**
+- [ ] APIs documentadas completamente
+- [ ] Ejemplos de código correctos
+- [ ] Parámetros y tipos especificados
+- [ ] Estilo consistente con docs existentes
+
+## Troubleshooting rápido
+
+### Workflow no se ejecuta
 
 ```bash
-# Commit the update
-git add src/features/userProfile.js
-git commit -m "feat(api): add deleteUserProfile function with soft/hard delete options"
-git push origin feature/user-profile-api
+# Verificar triggers del workflow
+cat .github/workflows/docusaurus-auto-docs.yml | grep -A 10 "on:"
+
+# Verificar archivos cambiados
+git diff --name-only HEAD~1
 ```
 
-The existing PR will be updated, triggering another workflow run.
-
-## Test Scenario 3: Error Handling
-
-Test how the system handles various error conditions.
-
-### Step 3.1: Invalid File Changes
-
-Create a change that shouldn't trigger documentation:
+### Agente no genera docs
 
 ```bash
-# Create a file that should be excluded
-echo "node_modules/" > .gitignore
-git add .gitignore
-git commit -m "chore: update gitignore"
-git push origin feature/user-profile-api
+# Verificar logs del workflow
+# GitHub → Actions → Workflow → "Ejecutar agente"
+
+# Verificar que ANTHROPIC_API_KEY está configurado
+# GitHub → Settings → Secrets
 ```
 
-**Expected Result**: No documentation workflow should trigger due to the exclusion patterns.
-
-### Step 3.2: Discord Webhook Failure
-
-Temporarily break the Discord webhook to test error handling:
+### Discord no notifica
 
 ```bash
-# In GitHub repository settings, temporarily change DISCORD_WEBHOOK_URL to an invalid URL
-# Then trigger the workflow again
-```
-
-**Expected Result**: Workflow should complete successfully but log Discord notification failure.
-
-## Validation Checklist
-
-After completing the tests, verify:
-
-### ✅ Agent Functionality
-- [ ] Docusaurus Expert agent executed successfully
-- [ ] Documentation generated matches code changes
-- [ ] Code examples are accurate and functional
-- [ ] Proper formatting and style consistency
-
-### ✅ Hook Integration
-- [ ] Discord notification sent for successful documentation updates
-- [ ] Rich embed format with proper information
-- [ ] Links to documentation PR work correctly
-- [ ] Error handling graceful when Discord fails
-
-### ✅ Workflow Automation
-- [ ] GitHub Actions triggered on appropriate file changes
-- [ ] Excluded paths properly ignored
-- [ ] Documentation PR created with descriptive content
-- [ ] Workflow summary generated correctly
-
-### ✅ End-to-End Process
-- [ ] Code changes → Documentation updates automatically
-- [ ] Team notified via Discord
-- [ ] Documentation PR ready for review
-- [ ] Process repeatable and reliable
-
-## Performance Testing
-
-### Workflow Execution Time
-
-Monitor workflow performance:
-
-```bash
-# Check workflow duration in GitHub Actions
-# Typical execution times:
-# - Setup: 30-60 seconds
-# - Agent execution: 2-5 minutes
-# - PR creation: 10-30 seconds
-# - Discord notification: 5-10 seconds
-# Total: 3-7 minutes
-```
-
-### Agent Response Quality
-
-Evaluate the Docusaurus Expert agent's output quality:
-
-- **Accuracy**: Documentation matches actual code functionality
-- **Completeness**: All new features properly documented
-- **Style**: Consistent with existing documentation
-- **Examples**: Code examples are correct and helpful
-
-## Troubleshooting Common Issues
-
-### Workflow Not Triggering
-
-```bash
-# Check file paths in workflow trigger
-# Verify changed files match the patterns
-git diff --name-only main...feature/user-profile-api
-
-# Common issues:
-# - Files excluded by workflow paths filter
-# - Branch protection rules preventing workflow execution
-# - Missing workflow file or syntax errors
-```
-
-### Agent Execution Failures
-
-```bash
-# Check Claude Code agent logs in GitHub Actions
-# Common issues:
-# - Invalid Anthropic API key
-# - Agent not properly installed
-# - Insufficient permissions for file operations
-```
-
-### Discord Notification Issues
-
-```bash
-# Test webhook manually
-curl -X POST "$DISCORD_WEBHOOK_URL" \
+# Probar webhook manualmente
+curl -X POST "$WEBHOOK_URL" \
   -H "Content-Type: application/json" \
-  -d '{"content": "Test message"}'
+  -d '{"content": "Test"}'
 
-# Common issues:
-# - Invalid webhook URL
-# - Discord server permissions
-# - Rate limiting
+# Verificar DISCORD_WEBHOOK_URL en secretos
 ```
 
-## Advanced Testing Scenarios
-
-### Large-Scale Changes
-
-Test with multiple file changes:
+### Documentación de mala calidad
 
 ```bash
-# Create multiple new features simultaneously
-# Verify agent handles complex documentation requirements
-# Check Discord notification includes all relevant changes
+# Revisar prompt del agente en workflow
+# Agregar más contexto específico del proyecto
+# Mejorar ejemplos en el prompt
 ```
 
-### Concurrent PRs
+## Métricas de éxito
 
-Test with multiple simultaneous pull requests:
+Después de 1 semana de uso:
 
-```bash
-# Create multiple feature branches
-# Submit PRs simultaneously
-# Verify each gets proper documentation treatment
+- **Cobertura**: 90%+ de nuevas funciones documentadas automáticamente
+- **Precisión**: 80%+ de documentación generada requiere mínimas ediciones
+- **Velocidad**: Documentación lista en menos de 5 minutos después del PR
+- **Adopción**: Equipo revisa y aprueba docs automáticas regularmente
+
+## Optimización continua
+
+### Mejorar prompts del agente
+
+```yaml
+# En el workflow, agregar más contexto
+prompt: |
+  Contexto del proyecto: [Tu descripción específica]
+
+  Estilo preferido: [Tu guía de estilo]
+
+  Ejemplos de buena documentación: [Links a ejemplos]
 ```
 
-### Documentation-Only Changes
+### Ajustar exclusiones
 
-Test exclusion of documentation changes:
-
-```bash
-# Make changes only to docs/ folder
-# Verify workflow doesn't create infinite loops
+```yaml
+# Excluir más tipos de archivos si es necesario
+paths:
+  - '!tests/**'
+  - '!*.config.js'
+  - '!*.json'
 ```
 
-## Success Metrics
+### Personalizar notificaciones
 
-Your automation system is working correctly when:
+```python
+# Diferentes formatos según el día/hora
+# Menciones específicas por tipo de cambio
+# Resúmenes semanales de actividad
+```
 
-- **🚀 Speed**: Documentation updated within 5 minutes of code changes
-- **📋 Accuracy**: 90%+ of generated documentation requires minimal manual editing
-- **🔔 Reliability**: Discord notifications sent for 95%+ of documentation updates
-- **⚡ Efficiency**: Team spends 80% less time on manual documentation tasks
+## ¡Sistema listo!
 
-## Next Steps
+Si todas las pruebas pasan, tu sistema de documentación automática está funcionando correctamente. Tu equipo ahora puede:
 
-Once testing is complete:
-
-1. **Train your team** on the new documentation workflow
-2. **Establish review processes** for automated documentation PRs
-3. **Monitor and optimize** agent performance over time
-4. **Expand automation** to additional documentation types
+- **Codificar** sin preocuparse por documentación manual
+- **Recibir notificaciones** automáticas de cambios
+- **Revisar** documentación generada antes de aprobar
+- **Mantener** docs siempre actualizadas con el código
 
 ---
 
-*Testing complete? Your intelligent documentation system is now ready for production use! 🎉*
+*¡Felicidades! Has implementado exitosamente un sistema completo de documentación automática con Claude Code.*

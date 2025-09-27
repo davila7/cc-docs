@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# IMPORTANT: Write every article and blog in english
+
 ## Repository Structure
 
 This repository contains Claude Code documentation organized into several main directories:

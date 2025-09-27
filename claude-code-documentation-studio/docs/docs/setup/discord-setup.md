@@ -2,286 +2,211 @@
 sidebar_position: 4
 ---
 
-# Discord Webhook Configuration
+# Discord Configuration
 
-> Complete guide to setting up Discord webhooks for automated documentation notifications.
+> Quick guide to set up Discord webhooks and receive automatic notifications.
 
-## Overview
+## What's this for?
 
-Discord webhooks allow your automated documentation workflow to send real-time notifications to your team when documentation is updated. This integration provides:
+Discord webhook allows you to receive automatic notifications when:
+- The agent updates documentation
+- A new documentation PR is created
+- You need to review documentation changes
 
-- **Instant notifications** when documentation PRs are created
-- **Rich embed messages** with PR details and changed files
-- **Direct links** to review and approve documentation updates
-- **Team mentions** for important documentation changes
+## 3-step configuration
 
-## Prerequisites
+### 1. Create webhook in Discord
 
-Before configuring Discord webhooks, ensure you have:
+1. **Open Discord** and go to your server
+2. **Right-click** the channel where you want notifications
+3. **Edit Channel** → **Integrations** → **Webhooks**
+4. **Create Webhook**
+5. **Copy Webhook URL** (save it, you'll need it)
 
-- **Discord Server**: Admin permissions on the server where you want notifications
-- **Documentation Channel**: Dedicated channel for documentation updates (recommended)
-- **GitHub Repository**: With the Claude Code workflow already configured
+### 2. Add webhook to GitHub
 
-## Step 1: Create Discord Webhook
-
-### 1.1 Access Server Settings
-
-1. **Open Discord** and navigate to your server
-2. **Right-click the server name** and select "Server Settings"
-3. **Navigate to Integrations** → **Webhooks**
-
-### 1.2 Create New Webhook
-
-1. **Click "Create Webhook"**
-2. **Configure webhook settings:**
-   - **Name**: `Documentation Bot` (or your preferred name)
-   - **Channel**: Select your documentation channel
-   - **Avatar**: Optional - upload a bot avatar
-
-### 1.3 Copy Webhook URL
-
-1. **Click "Copy Webhook URL"**
-2. **Save the URL securely** - you'll need it for GitHub configuration
-
-The webhook URL format will be:
-```
-https://discord.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN
-```
-
-:::warning Security Note
-Keep your webhook URL private. Anyone with this URL can send messages to your Discord channel.
-:::
-
-## Step 2: Configure GitHub Repository
-
-### 2.1 Add Repository Secret
-
-1. **Navigate to your GitHub repository**
-2. **Go to Settings** → **Secrets and variables** → **Actions**
-3. **Click "New repository secret"**
-4. **Configure the secret:**
+1. **Go to your repository** on GitHub
+2. **Settings** → **Secrets and variables** → **Actions**
+3. **New repository secret**:
    - **Name**: `DISCORD_WEBHOOK_URL`
-   - **Secret**: Paste your Discord webhook URL
+   - **Secret**: Paste your webhook URL
 
-### 2.2 Verify Secret Configuration
+### 3. Verify configuration
 
-Your repository secrets should now include:
-- `ANTHROPIC_API_KEY` (for Claude Code agent)
-- `DISCORD_WEBHOOK_URL` (for Discord notifications)
+The GitHub Actions workflow already includes Discord code. You just need the secret configured.
 
-## Step 3: Test Webhook Integration
+## Test the webhook
 
-### 3.1 Manual Webhook Test
-
-Test your webhook manually using curl:
+### Manual test
 
 ```bash
+# Replace YOUR_WEBHOOK_URL with your actual URL
 curl -X POST "YOUR_WEBHOOK_URL" \
   -H "Content-Type: application/json" \
-  -d '{
-    "content": "🧪 Testing Discord webhook integration",
-    "embeds": [{
-      "title": "Test Notification",
-      "description": "Webhook is working correctly!",
-      "color": 5814783,
-      "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+  -d '{"content": "🧪 Webhook test - It works!"}'
+```
+
+If you see the message in Discord, it's configured correctly!
+
+### Test with workflow
+
+1. Make a small change to a `.js` or `.ts` file
+2. Create commit and push to a branch
+3. Open PR to `main`
+4. Check your Discord channel for automatic notification
+
+## Customize notifications
+
+### Basic message format
+
+The message you'll receive has this format:
+
+```
+📚 Documentation updated
+The agent created a documentation PR
+
+📄 Files changed:
+```
+src/api.js
+src/utils.js
+```
+```
+
+### Change format
+
+If you want to customize the message, edit this part of the workflow:
+
+```python title="In .github/workflows/docusaurus-auto-docs.yml"
+embed = {
+    "title": "🤖 Your custom title",
+    "description": "Your custom description",
+    "color": 0x00ff00,  # Green color
+    "fields": [{
+        "name": "📂 Modified files",
+        "value": f"```\n{os.getenv('CHANGED_FILES', '')}\n```"
     }]
-  }'
+}
 ```
 
-You should see a test message appear in your Discord channel.
-
-### 3.2 GitHub Actions Test
-
-Create a test commit to trigger the workflow:
-
-```bash
-# Make a small change to trigger documentation workflow
-echo "// Test comment for webhook" >> src/example.js
-
-# Commit and push
-git add .
-git commit -m "test: trigger documentation workflow"
-git push origin your-feature-branch
-
-# Create pull request to main branch
-```
-
-## Step 4: Customize Notifications
-
-### 4.1 Message Formatting
-
-The Discord hook supports rich embed customization. Edit `.claude/hooks/discord-pr-notification.py`:
+### Available colors
 
 ```python
-# Custom embed colors for different types of changes
-def get_embed_color(files_changed):
-    if any('api/' in f for f in files_changed):
-        return 0xf39c12  # Orange for API changes
-    elif any('guide/' in f for f in files_changed):
-        return 0x27ae60  # Green for guides
-    else:
-        return 0x5865F2  # Default blue
+"color": 0x5865F2,  # Discord blue (default)
+"color": 0x00ff00,  # Green
+"color": 0xff0000,  # Red
+"color": 0xffff00,  # Yellow
+"color": 0xff8c00,  # Orange
 ```
 
-### 4.2 Team Mentions
+### Team mentions
 
-Add team mentions for important updates:
+To mention a specific role:
 
 ```python
-def get_team_mentions(files_changed):
-    mentions = []
-
-    if any('api/' in f for f in files_changed):
-        mentions.append("<@&API_TEAM_ROLE_ID>")
-
-    if any('security/' in f for f in files_changed):
-        mentions.append("<@&SECURITY_TEAM_ROLE_ID>")
-
-    return " ".join(mentions)
-
-# In your Discord payload
 payload = {
-    "content": get_team_mentions(changed_files),
+    "content": "<@&ROLE_ID> New documentation to review!",
     "embeds": [embed]
 }
 ```
 
-### 4.3 Conditional Notifications
+To get ROLE_ID:
+1. In Discord, type `\@role_name`
+2. Copy the number that appears
+3. Use it instead of `ROLE_ID`
 
-Send notifications only for specific types of changes:
+## Multiple channels
 
-```python
-def should_send_notification(files_changed):
-    # Only notify for documentation-relevant changes
-    doc_extensions = ['.md', '.mdx', '.js', '.ts', '.py']
+If you want notifications in different channels by change type:
 
-    return any(
-        any(f.endswith(ext) for ext in doc_extensions)
-        for f in files_changed
-    )
-```
+1. **Create multiple webhooks** in Discord
+2. **Add multiple secrets** in GitHub:
+   - `DISCORD_API_WEBHOOK` - For API changes
+   - `DISCORD_DOCS_WEBHOOK` - For documentation changes
+   - `DISCORD_GENERAL_WEBHOOK` - For everything else
 
-## Advanced Configuration
-
-### Multiple Webhooks
-
-Configure different webhooks for different types of notifications:
-
-```yaml
-# In GitHub Actions workflow
-- name: Send Discord notification
-  env:
-    DISCORD_WEBHOOK_URL: ${{
-      contains(steps.changed.outputs.files, 'api/') &&
-      secrets.DISCORD_API_WEBHOOK_URL ||
-      secrets.DISCORD_GENERAL_WEBHOOK_URL
-    }}
-```
-
-### Rate Limiting
-
-Add retry logic for Discord API rate limits:
-
-```python
-import time
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-
-def send_with_retry(webhook_url, payload, max_retries=3):
-    session = requests.Session()
-    retry_strategy = Retry(
-        total=max_retries,
-        backoff_factor=1,
-        status_forcelist=[429, 500, 502, 503, 504]
-    )
-
-    adapter = HTTPAdapter(max_retries=retry_strategy)
-    session.mount("https://", adapter)
-
-    try:
-        response = session.post(webhook_url, json=payload, timeout=30)
-        response.raise_for_status()
-        return True
-    except requests.RequestException as e:
-        print(f"Failed after {max_retries} retries: {e}", file=sys.stderr)
-        return False
-```
+3. **Modify workflow** to use appropriate webhook
 
 ## Troubleshooting
 
-### Common Issues
+### No notifications received
 
-**Webhook not receiving messages**
+**Verify webhook URL**
 ```bash
-# Verify webhook URL is correct
-curl -X POST "YOUR_WEBHOOK_URL" -H "Content-Type: application/json" -d '{"content": "test"}'
-
-# Check GitHub Actions logs for error messages
+# In GitHub → Settings → Secrets
+# Should exist DISCORD_WEBHOOK_URL
 ```
 
-**Discord API rate limiting**
-```bash
-# Check response headers for rate limit information
-# Implement exponential backoff in your hook script
-```
+**Verify Discord permissions**
+- Webhook must have permissions to send messages
+- Channel must allow webhooks
 
-**Missing notifications**
-```bash
-# Verify GitHub repository secrets are set
-# Check GitHub Actions workflow execution logs
-# Ensure Discord webhook URL has proper permissions
-```
+**Check workflow logs**
+- Go to GitHub Actions
+- Look for "Notify Discord" step
+- Review for errors
 
-**JSON parsing errors**
-```bash
-# Test hook input format locally
-echo '{"test": "data"}' | python3 .claude/hooks/discord-pr-notification.py
-```
+### "Invalid Webhook" error
 
-### Debug Mode
+- **Regenerate webhook** in Discord
+- **Update secret** in GitHub
+- **Verify** no extra spaces in URL
 
-Enable debug logging in your Discord hook:
+### Too many notifications
 
 ```python
-import logging
-
-# Add to the beginning of your hook script
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-def send_discord_notification(webhook_url, pr_data):
-    logger.debug(f"Sending notification with data: {pr_data}")
-    # ... rest of function
+# Add condition in workflow
+if len(changed_files.split()) > 10:
+    # Don't notify if too many files changed
+    exit(0)
 ```
 
-## Security Best Practices
+### Rate limiting
 
-### Webhook URL Protection
+Discord limits webhooks to 30 messages per minute. If you have many PRs:
 
-- **Never commit webhook URLs** to your repository
-- **Use GitHub Secrets** for all sensitive configuration
-- **Rotate webhook URLs** periodically
-- **Monitor webhook usage** in Discord audit logs
+```python
+import time
+time.sleep(2)  # Wait 2 seconds between notifications
+```
 
-### Access Control
+## Advanced configuration
 
-- **Limit webhook permissions** to specific channels
-- **Use dedicated service accounts** for automation
-- **Review team access** to repository secrets regularly
+### Work hours only notifications
 
-## Next Steps
+```python
+from datetime import datetime
 
-Now that Discord notifications are configured:
+hour = datetime.now().hour
+if not (9 <= hour <= 18):  # Only between 9 AM and 6 PM
+    exit(0)
+```
 
-1. **Test the complete workflow** with a real code change
-2. **Customize notification content** for your team's needs
-3. **Set up additional channels** for different types of updates
-4. **Configure team mentions** for critical documentation changes
+### Different formats by weekday
 
-Continue with [End-to-End Testing](/docs/setup/testing) to verify your complete documentation automation pipeline.
+```python
+from datetime import datetime
+
+if datetime.now().weekday() == 4:  # Friday
+    embed["title"] = "🎉 Documentation updated - Have a great weekend!"
+```
+
+### Include statistics
+
+```python
+embed["fields"].append({
+    "name": "📊 Statistics",
+    "value": f"Files: {len(files)}\nLines: {total_lines}"
+})
+```
+
+## Next step
+
+With Discord configured:
+
+1. **Test** by making a real code change
+2. **Verify** you receive notification
+3. **Continue with** [Complete Testing](/docs/setup/testing)
 
 ---
 
-*Stay connected with your team! Discord notifications ensure everyone knows when documentation is updated automatically.*
+*Discord configured! Your team will always be informed about documentation changes.*

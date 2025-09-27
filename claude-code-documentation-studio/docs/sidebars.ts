@@ -21,9 +21,7 @@ const sidebars: SidebarsConfig = {
       label: '🤖 Subagents',
       items: [
         'subagents/overview',
-        'subagents/agent-case-1',
-        'subagents/agent-case-2',
-        'subagents/agent-case-3',
+        'subagents/docusaurus-expert'
       ],
     },
     {
