@@ -8,6 +8,8 @@ sidebar_position: 1
 
 Custom subagents in Claude Code are specialized AI assistants that can be invoked to handle specific types of tasks. They enable more efficient problem-solving by providing task-specific configurations with customized system prompts, tools and a separate context window.
 
+<img width="665" height="503" alt="Screenshot 2025-09-27 at 17 09 29" src="https://github.com/user-attachments/assets/0b784f6c-113c-4a34-8bd3-be8c208ef233" />
+
 ## What are subagents?
 
 Subagents are pre-configured AI personalities that Claude Code can delegate tasks to. Each subagent:
