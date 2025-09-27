@@ -376,4 +376,4 @@ EOF
 
 ---
 
-Ready to create specialized subagents? Continue with [Subagent Configuration](/docs/subagents/subagent-configuration) for advanced configuration options.
+Ready to create specialized subagents? Continue with [Advanced Subagent Patterns](/docs/subagents/advanced) for advanced configuration options.

@@ -671,4 +671,4 @@ track_session_event(event_type)
 
 ---
 
-Ready to create your own hooks? Continue with [Creating Hooks](/docs/hooks/creating-hooks) for hands-on implementation guides.
+Ready to create your own hooks? Continue with [Advanced Hook Patterns](/docs/hooks/advanced) for hands-on implementation guides.

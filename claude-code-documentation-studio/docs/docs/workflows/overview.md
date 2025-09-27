@@ -613,4 +613,4 @@ class ParallelWorkflowExecutor:
 
 ---
 
-Ready to implement advanced workflows? Continue with [Orchestration Patterns](/docs/workflows/orchestration-patterns) for detailed implementation guides.
+Ready to implement advanced workflows? Continue with [CI/CD Workflow](/docs/workflows/cicd-workflow) for detailed implementation guides.

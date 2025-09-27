@@ -49,9 +49,9 @@ mkdir -p {src,tests,scripts,docs}
 ### 2. Clone Advanced Patterns Repository
 
 ```bash
-# Clone the advanced patterns repository
-git clone https://github.com/anthropic/claude-code-agents-hooks-advanced.git
-cd claude-code-agents-hooks-advanced
+# Clone the documentation studio repository
+git clone https://github.com/anthropic/claude-code-documentation-studio.git
+cd claude-code-documentation-studio
 
 # Copy example configurations to your project
 cp -r phase-2-implementation/.claude/* /path/to/your/project/.claude/
@@ -279,8 +279,8 @@ chmod -R 755 .claude/
 
 ### Getting Help
 
-- 📖 Review the [Troubleshooting Guide](/docs/troubleshooting/common-issues)
-- 🐛 Check [GitHub Issues](https://github.com/anthropic/claude-code-agents-hooks-advanced/issues)
+- 📖 Review the documentation sections for specific guidance
+- 🐛 Check [GitHub Issues](https://github.com/anthropic/claude-code-documentation-studio/issues)
 - 💬 Join the Claude Code community discussions
 
 ---

@@ -1,7 +1,0 @@
-# Custom Agent Implementations
-
-This directory will contain:
-- custom-agent-templates/
-- specialized-agents/ (code-reviewer, test-runner, deploy-manager, etc.)
-- agent-orchestration-patterns/
-- agent-lifecycle-management/

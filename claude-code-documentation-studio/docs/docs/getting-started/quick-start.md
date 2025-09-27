@@ -369,7 +369,7 @@ Now that you have the basics working:
 1. 📖 **Learn More**: Explore [Subagents Overview](/docs/subagents/overview) for advanced patterns
 2. 🪝 **Advanced Hooks**: Check out [Hooks Overview](/docs/hooks/overview) for complex automation
 3. 🔄 **Workflow Patterns**: See [Workflows Overview](/docs/workflows/overview) for orchestration
-4. 🔒 **Security**: Review [Security Patterns](/docs/security/validation-patterns) for enterprise use
+4. 🔒 **Security**: Review [Advanced Hook Patterns](/docs/hooks/advanced) for enterprise security automation
 
 ## Troubleshooting
 
