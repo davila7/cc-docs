@@ -46,6 +46,8 @@ Run the following command:
 ### 2. Select 'Create New Agent'
 Choose whether to create a project-level or user-level subagent
 
+<img width="479" height="312" alt="Screenshot 2025-09-26 at 20 20 27" src="https://github.com/user-attachments/assets/4844d2cc-63ec-45d8-9bd9-7846af2c9b1d" />
+
 ### 3. Define the subagent
 * **Recommended**: Generate with Claude first, then customize to make it yours
 * Describe your subagent in detail and when it should be used
