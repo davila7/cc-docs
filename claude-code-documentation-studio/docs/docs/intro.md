@@ -10,8 +10,7 @@ slug: /
 ### Overview
 Step-by-step tutorial for implementing intelligent documentation automation using Claude Code Subagents and Hooks integrated with Docusaurus, GitHub Actions, and Discord notifications
 
-[Image]
-
+<img width="685" height="482" alt="Screenshot 2025-09-27 at 15 06 21" src="https://github.com/user-attachments/assets/201b86de-750d-4c2a-a90e-77f3c7ac9365" />
 
 ### Requirements
 Before implementing this automated documentation system, ensure you have:
