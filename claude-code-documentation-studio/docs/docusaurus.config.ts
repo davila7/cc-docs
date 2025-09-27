@@ -75,18 +75,12 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Claude Code Documentation Pipeline',
+      title: 'Claude Code Academy',
       logo: {
         alt: 'Claude Code Logo',
         src: 'img/logo.svg',
       },
       items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Documentation',
-        },
         {
           href: 'https://github.com/anthropic/claude-code-documentation-studio',
           label: 'GitHub',

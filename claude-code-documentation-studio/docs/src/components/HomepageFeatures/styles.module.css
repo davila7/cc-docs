@@ -1,11 +1,141 @@
 .features {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
-  width: 100%;
+  padding: 4rem 0;
+  background-color: #111111;
 }
 
-.featureSvg {
-  height: 200px;
-  width: 200px;
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+  font-size: 1.2rem;
+  color: #d1d5db;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.feature {
+  margin-bottom: 2rem;
+}
+
+.featureLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.featureCard {
+  height: 300px;
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(249, 115, 22, 0.4);
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.featureContent {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.featureType {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #f97316;
+  margin-bottom: 1rem;
+  border: 1px solid #f97316;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  width: fit-content;
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+.featureTitle {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  margin-bottom: 0.5rem !important;
+  color: white !important;
+}
+
+.featureDescription {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #f97316;
+}
+
+.featureDetails {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #d1d5db;
+  flex-grow: 1;
+}
+
+/* Responsive design */
+@media screen and (max-width: 996px) {
+  .features {
+    padding: 3rem 0;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .featureCard {
+    height: 280px;
+    padding: 1.5rem;
+  }
+
+  .featureTitle {
+    font-size: 1.3rem !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .features {
+    padding: 2rem 0;
+  }
+
+  .feature {
+    margin-bottom: 1.5rem;
+  }
+
+  .featureCard {
+    height: 260px;
+    padding: 1.5rem;
+  }
+
+  .featureTitle {
+    font-size: 1.2rem !important;
+  }
+
+  .featureDescription {
+    font-size: 1rem;
+  }
+
+  .featureDetails {
+    font-size: 0.9rem;
+  }
 }

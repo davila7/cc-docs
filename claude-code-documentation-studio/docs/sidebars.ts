@@ -29,9 +29,7 @@ const sidebars: SidebarsConfig = {
       label: '🪝 Hooks',
       items: [
         'hooks/overview',
-        'hooks/hook-case-1',
-        'hooks/hook-case-2',
-        'hooks/hook-case-3',
+        'hooks/discord-notification-hook'
       ],
     },
     {

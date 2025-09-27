@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(npx create-docusaurus:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Read(//var/folders/r4/mykdhct5247dlp3mr7h5488m0000gn/T/TemporaryItems/NSIRD_screencaptureui_QTiGj1/**)",
+      "Read(//var/folders/r4/mykdhct5247dlp3mr7h5488m0000gn/T/TemporaryItems/NSIRD_screencaptureui_2qS9YL/**)"
     ],
     "deny": [],
     "ask": []
