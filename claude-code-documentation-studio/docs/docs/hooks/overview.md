@@ -414,4 +414,4 @@ def audit_log(event_type, details):
 
 ---
 
-Ready to implement advanced hooks? Continue with [Hook Types](/docs/hooks/hook-types) to explore specific hook implementations.
+Ready to implement advanced hooks? Continue with [Hook Case 1](/docs/hooks/hook-case-1) to explore specific hook implementations.

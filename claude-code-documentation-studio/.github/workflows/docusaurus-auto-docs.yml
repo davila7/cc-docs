@@ -1,0 +1,336 @@
+# Docusaurus Documentation Automation
+# Automated documentation update workflow using Claude Code Docusaurus Expert agent
+# Triggers on pull requests and creates documentation updates via Discord notifications
+
+name: Docusaurus Documentation Automation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      # CUSTOMIZE: Add file types that should trigger documentation updates
+      - '**.js'
+      - '**.ts'
+      - '**.jsx'
+      - '**.tsx'
+      - '**.py'
+      - '**.java'
+      - '**.md'
+      # CUSTOMIZE: Add more file extensions as needed
+
+      # CUSTOMIZE: Exclude paths that shouldn't trigger documentation
+      - '!.github/**'
+      - '!**/node_modules/**'
+      - '!**/dist/**'
+      - '!**/build/**'
+      - '!docs/**'  # CRITICAL: Replace 'docs' with your Docusaurus folder path
+                    # This prevents infinite loops - without this exclusion,
+                    # Claude Code will create endless PRs updating documentation
+                    # Common paths: !docu/**, !documentation/**, !website/docs/**
+
+jobs:
+  auto-document:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write  # Required for claude-code-action
+
+    steps:
+      # Step 1: Checkout repository with full history
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history needed for proper diff analysis
+
+      # Step 2: Setup Claude configuration and install Docusaurus Expert agent
+      - name: Setup Claude configuration
+        run: |
+          mkdir -p .claude/agents
+          mkdir -p .claude/hooks
+
+          # Install Docusaurus Expert agent if not exists
+          if [ ! -f ".claude/agents/docusaurus-expert.md" ]; then
+            echo "Installing Docusaurus Expert agent..."
+            npx claude-code-templates@latest \
+              --agent documentation/docusaurus-expert \
+              --yes \
+              --directory .
+          else
+            echo "Docusaurus Expert agent already exists"
+          fi
+
+          # Verify agent installation
+          if [ -f ".claude/agents/docusaurus-expert.md" ]; then
+            echo "✅ Docusaurus Expert agent ready"
+          else
+            echo "❌ Failed to install Docusaurus Expert agent"
+            exit 1
+          fi
+
+      # Step 3: Install Discord notification hook
+      - name: Create Discord notification hook
+        run: |
+          cat > .claude/hooks/discord-pr-notification.py << 'EOF'
+          #!/usr/bin/env python3
+          """
+          Discord PR Notification Hook
+          Sends notifications to Discord when documentation PRs are created
+          """
+
+          import json
+          import sys
+          import os
+          import requests
+          from datetime import datetime
+
+          def send_discord_notification(webhook_url, pr_data):
+              """Send a rich embed notification to Discord"""
+
+              # Create rich embed for Discord
+              embed = {
+                  "title": "📚 Documentation Updated",
+                  "description": f"The Docusaurus Expert agent has created a new documentation PR",
+                  "color": 0x5865F2,  # Discord blurple color
+                  "timestamp": datetime.utcnow().isoformat(),
+                  "fields": [
+                      {
+                          "name": "📝 Pull Request",
+                          "value": f"[{pr_data['title']}]({pr_data['url']})",
+                          "inline": False
+                      },
+                      {
+                          "name": "🔗 Branch",
+                          "value": pr_data['branch'],
+                          "inline": True
+                      },
+                      {
+                          "name": "👤 Created by",
+                          "value": pr_data['author'],
+                          "inline": True
+                      },
+                      {
+                          "name": "📄 Files Changed",
+                          "value": f"```\n{pr_data['files']}\n```" if pr_data['files'] else "No specific files listed",
+                          "inline": False
+                      }
+                  ],
+                  "footer": {
+                      "text": "Claude Code Documentation Studio",
+                      "icon_url": "https://avatars.githubusercontent.com/u/anthropics"
+                  }
+              }
+
+              # Add review reminder if needed
+              if pr_data.get('needs_review'):
+                  embed["fields"].append({
+                      "name": "⚠️ Action Required",
+                      "value": "This PR needs review and approval to update the documentation site.",
+                      "inline": False
+                  })
+
+              payload = {
+                  "embeds": [embed],
+                  "username": "Documentation Bot",
+                  "avatar_url": "https://avatars.githubusercontent.com/u/anthropics"
+              }
+
+              # Send to Discord
+              try:
+                  response = requests.post(webhook_url, json=payload, timeout=30)
+                  response.raise_for_status()
+                  return True
+              except requests.RequestException as e:
+                  print(f"Failed to send Discord notification: {e}", file=sys.stderr)
+                  return False
+
+          def extract_pr_info_from_github_context():
+              """Extract PR information from GitHub Actions context"""
+
+              # Get GitHub event data from environment
+              github_repository = os.getenv('GITHUB_REPOSITORY', 'unknown/repo')
+              github_run_id = os.getenv('GITHUB_RUN_ID', '0')
+
+              pr_data = {
+                  'title': 'Documentation Update',
+                  'url': f"https://github.com/{github_repository}/actions/runs/{github_run_id}",
+                  'branch': 'docs/auto-update',
+                  'author': 'claude-code[bot]',
+                  'files': '',
+                  'needs_review': True
+              }
+
+              return pr_data
+
+          def main():
+              """Main hook execution"""
+              try:
+                  # Get Discord webhook URL from environment
+                  webhook_url = os.getenv('DISCORD_WEBHOOK_URL')
+                  if not webhook_url:
+                      print("No Discord webhook URL configured", file=sys.stderr)
+                      sys.exit(0)  # Exit gracefully, don't fail the workflow
+
+                  # Extract PR information
+                  pr_data = extract_pr_info_from_github_context()
+
+                  # Add changed files from environment
+                  changed_files = os.getenv('CHANGED_FILES', '')
+                  if changed_files:
+                      pr_data['files'] = changed_files.replace(' ', '\n')
+
+                  # Send Discord notification
+                  success = send_discord_notification(webhook_url, pr_data)
+
+                  if success:
+                      print("✅ Discord notification sent successfully")
+                  else:
+                      print("❌ Failed to send Discord notification")
+
+              except Exception as e:
+                  print(f"Hook execution error: {e}", file=sys.stderr)
+                  sys.exit(1)
+
+          if __name__ == "__main__":
+              main()
+          EOF
+
+          # Make hook executable
+          chmod +x .claude/hooks/discord-pr-notification.py
+          echo "✅ Discord notification hook created"
+
+      # Step 4: Get changed files for context
+      - name: Get changed files
+        id: changed
+        run: |
+          # Fetch the base branch for comparison
+          git fetch origin ${{ github.event.pull_request.base.ref }}:${{ github.event.pull_request.base.ref }}
+
+          # Get list of changed files and save to output
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.ref }}...HEAD | tr '\n' ' ')
+          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+
+          # Display changed files for debugging
+          echo "📋 Changed files detected:"
+          echo "$CHANGED_FILES"
+
+      # Step 5: Update documentation using Docusaurus Expert agent
+      - name: Update documentation
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Read and follow the instructions in .claude/agents/docusaurus-expert.md
+
+            Changed files in this pull request:
+            ${{ steps.changed.outputs.files }}
+
+            ## Requirements
+            1. Find the Docusaurus documentation (check: docs/, docu/, documentation/, website/docs/)
+            2. Update documentation for any changed functionality
+            3. Add new documentation for new features
+            4. Update API references if function signatures changed
+            5. Ensure all code examples match the current implementation
+            6. Maintain consistent documentation style and formatting
+
+            ## Project-specific rules
+            # CUSTOMIZE: Update these rules for your project
+            - Documentation language: English
+            - Code examples should include TypeScript types where applicable
+            - Follow existing documentation structure and style
+            - Update getting-started.md for new features
+            - Create feature-specific documentation files when appropriate
+            - Include proper cross-references between related documentation
+
+            ## Current Project Context
+            # CUSTOMIZE: Replace with your project's context
+            This is a Claude Code Documentation Studio project featuring:
+            - Automated documentation workflows using Claude Code agents
+            - Discord notification integration for team communication
+            - GitHub Actions CI/CD pipeline for documentation automation
+            - Docusaurus site for documentation hosting
+            - Step-by-step tutorials for implementation
+
+            Focus on documenting the changes found in the modified files above.
+            Ensure all new features have comprehensive documentation with examples.
+          # CUSTOMIZE: Adjust max turns and other settings as needed
+          claude_args: "--max-turns 15 --dangerously-skip-permissions"
+
+      # Step 6: Create pull request with documentation updates
+      - name: Create Pull Request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "docs: update documentation via docusaurus-expert agent"
+          title: "📚 Documentation Update - Automated"
+          body: |
+            ## Automated Documentation Update
+
+            This pull request contains documentation updates generated by the Docusaurus Expert agent based on recent code changes.
+
+            ### Changed Files Analyzed:
+            ```
+            ${{ steps.changed.outputs.files }}
+            ```
+
+            ### What Was Updated:
+            - ✅ Documentation synchronized with code changes
+            - ✅ New features documented with examples
+            - ✅ API references updated where applicable
+            - ✅ Code examples verified and updated
+
+            ### Review Checklist:
+            - [ ] Documentation accuracy verified
+            - [ ] Code examples tested
+            - [ ] Links and references working
+            - [ ] Style consistency maintained
+
+            **Generated by:** Claude Code Docusaurus Expert Agent
+            **Workflow:** `docusaurus-auto-docs.yml`
+            **Triggered by:** PR #${{ github.event.pull_request.number }}
+
+          branch: docs/auto-${{ github.sha }}
+          base: main  # CUSTOMIZE: Match your default branch
+          # CUSTOMIZE: Add your team or specific reviewers
+          # team-reviewers: documentation-team
+          # reviewers: your-username
+
+      # Step 7: Send Discord notification
+      - name: Send Discord notification
+        if: steps.create-pr.outputs.pull-request-number != ''
+        run: |
+          export CHANGED_FILES="${{ steps.changed.outputs.files }}"
+          export DISCORD_WEBHOOK_URL="${{ secrets.DISCORD_WEBHOOK_URL }}"
+
+          # Update PR data with actual information
+          export PR_NUMBER="${{ steps.create-pr.outputs.pull-request-number }}"
+          export PR_URL="${{ steps.create-pr.outputs.pull-request-url }}"
+
+          echo "🔔 Sending Discord notification for PR #$PR_NUMBER"
+          python3 .claude/hooks/discord-pr-notification.py
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
+      # Step 8: Workflow summary
+      - name: Workflow Summary
+        if: always()
+        run: |
+          echo "## 📋 Workflow Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔍 Analysis Results" >> $GITHUB_STEP_SUMMARY
+          echo "- **Changed Files:** ${{ steps.changed.outputs.files }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Documentation PR:** ${{ steps.create-pr.outputs.pull-request-url || 'Not created' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Discord Notification:** ${{ secrets.DISCORD_WEBHOOK_URL && '✅ Sent' || '⚠️ Skipped (no webhook configured)' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🤖 Agent Activity" >> $GITHUB_STEP_SUMMARY
+          echo "- **Docusaurus Expert Agent:** ✅ Executed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "- **Documentation Updates:** ✅ Applied automatically" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📚 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review the generated documentation PR" >> $GITHUB_STEP_SUMMARY
+          echo "2. Test any new code examples" >> $GITHUB_STEP_SUMMARY
+          echo "3. Approve and merge when ready" >> $GITHUB_STEP_SUMMARY

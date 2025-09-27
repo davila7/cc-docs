@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx create-docusaurus:*)"
+      "Bash(npx create-docusaurus:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

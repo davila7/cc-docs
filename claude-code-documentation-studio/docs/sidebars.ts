@@ -43,6 +43,14 @@ const sidebars: SidebarsConfig = {
         'workflows/cicd-workflow',
       ],
     },
+    {
+      type: 'category',
+      label: '⚙️ Setup & Testing',
+      items: [
+        'setup/discord-setup',
+        'setup/testing',
+      ],
+    },
   ],
 };
 
