@@ -24,7 +24,7 @@ This tutorial provides step-by-step instructions for implementing intelligent do
     width="800"
     height="auto"
     alt="Claude Code Documentation Studio - Advanced Integration Patterns Architecture"
-    src="https://github.com/user-attachments/assets/201b86de-750d-4c2a-a90e-77f3c7ac9365"
+    src="https://github.com/user-attachments/assets/1a7da389-d423-4cdc-a451-b380851f08d"
     style={{
       borderRadius: '12px',
       boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
