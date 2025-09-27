@@ -75,7 +75,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Claude Code Advanced Patterns',
+      title: 'Claude Code Documentation Pipeline',
       logo: {
         alt: 'Claude Code Logo',
         src: 'img/logo.svg',
