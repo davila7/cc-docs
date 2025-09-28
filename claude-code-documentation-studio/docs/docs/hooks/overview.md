@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Hooks are simple scripts that run automatically when Claude Code does something. Think of them as "if this happens, then do that" automation.
 
-<img width="682" height="581" alt="Screenshot 2025-09-27 at 20 29 37" src="https://github.com/user-attachments/assets/c81d2839-947b-4f66-92dc-08fc4ae0a646" />
+<img width="673" height="583" alt="Screenshot 2025-09-28 at 15 13 52" src="https://github.com/user-attachments/assets/d3e0e19e-1802-4a0b-a8a7-68bbce44c6fd" />
 
 ## What are hooks?
 
