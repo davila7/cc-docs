@@ -10,15 +10,60 @@ sidebar_position: 3
 
 This hook automatically sends Discord messages when Claude Code agents complete tasks, create PRs, or trigger specific events in your workflows.
 
-<img width="657" height="418" alt="Screenshot 2025-09-27 at 20 59 36" src="https://github.com/user-attachments/assets/bc21b49a-9946-4c83-b0f7-a49816274a71" />
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="657"
+    height="418"
+    alt="Discord notification hook workflow - from Claude Code events to Discord messages"
+    src="https://github.com/user-attachments/assets/bc21b49a-9946-4c83-b0f7-a49816274a71"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Discord notification hook workflow showing automatic team notifications
+  </p>
+</div>
 
 ## Create Discord webhook
 
 1. **Open Discord** → Go to your server
 2. **Right-click channel** → **Edit Channel** → **Integrations** → **Webhooks**
 3. **Create Webhook** → **Copy Webhook URL**
-4. 
-<img width="717" height="384" alt="Screenshot 2025-09-28 at 11 54 23" src="https://github.com/user-attachments/assets/d113b716-b4ad-4ed6-8a4f-0ed5e29a76a6" />
+4. **Copy the webhook URL**:
+
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="717"
+    height="384"
+    alt="Discord webhook creation interface showing how to create and copy webhook URL"
+    src="https://github.com/user-attachments/assets/d113b716-b4ad-4ed6-8a4f-0ed5e29a76a6"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Discord webhook creation and configuration interface
+  </p>
+</div>
 
 Test it works:
 ```bash
@@ -220,7 +265,29 @@ When Claude completes any tool (Write, Edit, Bash, etc.), the PostToolUse hook t
 2. **Ask Claude to make a change**: "Create a test file called hello.txt with 'Hello World'"
 3. **Check Discord** - You should see a notification like:
 
-<img width="650" height="303" alt="Screenshot 2025-09-28 at 13 01 11" src="https://github.com/user-attachments/assets/2c0e2623-e50f-4413-92aa-ee8d2a84f1d1" />
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="650"
+    height="303"
+    alt="Discord notification example showing Claude Code activity message in Discord channel"
+    src="https://github.com/user-attachments/assets/2c0e2623-e50f-4413-92aa-ee8d2a84f1d1"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Example Discord notification sent by the hook when Claude Code completes a task
+  </p>
+</div>
 
 ## Troubleshooting
 

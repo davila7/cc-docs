@@ -8,7 +8,29 @@ sidebar_position: 1
 
 Hooks are simple scripts that run automatically when Claude Code does something. Think of them as "if this happens, then do that" automation.
 
-<img width="673" height="583" alt="Screenshot 2025-09-28 at 15 13 52" src="https://github.com/user-attachments/assets/d3e0e19e-1802-4a0b-a8a7-68bbce44c6fd" />
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="673"
+    height="583"
+    alt="Claude Code Hooks overview - event-driven automation that responds to Claude Code actions"
+    src="https://github.com/user-attachments/assets/d3e0e19e-1802-4a0b-a8a7-68bbce44c6fd"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Claude Code hooks enable event-driven automation for notifications and custom workflows
+  </p>
+</div>
 
 ## What are hooks?
 

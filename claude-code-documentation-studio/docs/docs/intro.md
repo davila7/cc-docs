@@ -2,120 +2,113 @@
 sidebar_position: 1
 slug: /
 title: "Claude Code Academy"
-description: "Learn Claude Code components, use cases, and production workflows through hands-on tutorials"
-keywords: [claude-code, academy, subagents, hooks, automation, workflows, github-actions]
+description: "Learn Claude Code step by step with easy tutorials"
+keywords: [claude-code, academy, tutorials, automation, beginner-friendly]
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 # Claude Code Academy
 
-Welcome to Claude Code Academy! Learn Claude Code's powerful features through hands-on tutorials that teach you to build real-world automation workflows. No complex setup required - just follow along and master Claude Code step by step.
+Learn Claude Code through simple, hands-on tutorials. We'll teach you the essential features step by step - no complex setup needed!
 
-## What You'll Learn
+## What is Claude Code Academy?
 
-In Claude Code Academy, you'll master the core components of Claude Code through practical projects:
+Claude Code Academy helps you learn Claude Code by building real automation workflows. You'll start with the basics and gradually build more advanced features.
 
-- **Subagents**: Specialized AI assistants that handle specific tasks
-- **Hooks**: Event-driven automation that responds to your actions
-- **Workflows**: Complete CI/CD integration with GitHub Actions
-- **Real-world patterns**: Production-ready automation strategies
+By the end, you'll know how to:
+- Create specialized AI assistants (called **subagents**)
+- Set up automatic actions (called **hooks**)
+- Build complete automation workflows
 
-You'll build a complete automated documentation system that demonstrates all these concepts working together!
+## Learning Path
 
-## Academy Modules
+We've organized everything into 5 easy modules. Each one builds on the previous, but you can also jump to what interests you most.
 
-Claude Code Academy has **5 progressive modules** that teach you Claude Code from fundamentals to advanced workflows:
+### 1. What are Subagents?
+Learn the basics of Claude Code's specialized assistants.
 
-### Module 1: Subagents (Foundation)
-**What you'll do:** Learn what subagents are and how they work
-**Time:** 15-20 minutes
-**You'll learn:** The core concepts behind Claude Code's specialized agents
+**Time:** 15 minutes
+**What you'll build:** Understanding of how subagents work
 
-[Start Module 1: Subagents →](/docs/subagents/overview)
+[Start here →](/docs/subagents/overview)
 
-### Module 2: Docusaurus Expert Agent
-**What you'll do:** Set up a specialized agent for documentation automation
-**Time:** 10-15 minutes
-**You'll learn:** How to configure and use a real-world subagent
+### 2. Build a Documentation Assistant
+Create your first real subagent that helps with documentation.
 
-[Go to Module 2: Docusaurus Expert →](/docs/subagents/docusaurus-expert)
+**Time:** 15 minutes
+**What you'll build:** A working Docusaurus expert agent
 
-### Module 3: Hooks (Event Automation)
-**What you'll do:** Learn how hooks respond to Claude Code events
-**Time:** 20-25 minutes
-**You'll learn:** Event-driven automation fundamentals in Claude Code
+[Go to Module 2 →](/docs/subagents/docusaurus-expert)
 
-[Go to Module 3: Hooks →](/docs/hooks/overview)
+### 3. Learn About Hooks
+Discover how to make Claude Code respond to events automatically.
 
-### Module 4: Discord Notification Hook
-**What you'll do:** Build a practical hook that sends Discord notifications
-**Time:** 15-20 minutes
-**You'll learn:** How to create custom hooks for team communication
+**Time:** 20 minutes
+**What you'll build:** Understanding of event-driven automation
 
-[Go to Module 4: Discord Notifications →](/docs/hooks/discord-notification-hook)
+[Go to Module 3 →](/docs/hooks/overview)
 
-### Module 5: CI/CD Workflow
-**What you'll do:** Integrate everything with GitHub Actions for production workflows
-**Time:** 25-30 minutes
-**You'll learn:** How to build complete automation pipelines with Claude Code
+### 4. Create Discord Notifications
+Build a hook that sends team notifications to Discord.
 
-[Go to Module 5: CI/CD Workflow →](/docs/workflows/cicd-workflow)
+**Time:** 20 minutes
+**What you'll build:** A working Discord notification system
 
-## What You Need to Get Started
+[Go to Module 4 →](/docs/hooks/discord-notification-hook)
 
-Don't worry - you don't need much to begin:
+### 5. Automate with GitHub Actions
+Connect everything together for a complete automation workflow.
 
-<Tabs>
-<TabItem value="essential" label="✅ Must Have">
+**Time:** 30 minutes
+**What you'll build:** A full CI/CD pipeline with Claude Code
 
-- **Claude Code account** (if you're reading this, you probably have one!)
-- **GitHub repository** where you want automated docs
-- **Basic familiarity** with GitHub (you know how to push code)
+[Go to Module 5 →](/docs/workflows/cicd-workflow)
 
-</TabItem>
-<TabItem value="optional" label="📱 Nice to Have">
+## What You Need
 
-- **Discord server** (for team notifications)
-- **Docusaurus site** (we can set this up together if needed)
+To follow along, you'll need:
 
-</TabItem>
-</Tabs>
+**Required:**
+- A Claude Code account
+- A GitHub account
+- Basic familiarity with GitHub (you know how to create repos and push code)
 
-## How Claude Code Academy Works
+**Optional (for some modules):**
+- A Discord server (for notification tutorials)
+
+## How to Use This Academy
 
 Each module is designed to be:
-- **Quick to complete** (15-30 minutes each)
-- **Immediately useful** (you'll see results right away)
-- **Easy to follow** (step-by-step instructions with examples)
-- **Practical** (real Claude Code patterns you can use anywhere)
+- **Quick** - Most take 15-30 minutes
+- **Practical** - You'll build real, working features
+- **Easy to follow** - Clear step-by-step instructions
+- **Immediately useful** - You can use what you learn right away
 
-You can complete all 5 modules in one sitting (about 2 hours total) or learn at your own pace.
+You can work through all modules in about 2 hours, or take your time and do one module at a time.
 
 ## Ready to Start?
 
-The best way to learn Claude Code is by doing! Let's begin with Module 1 where you'll learn about subagents.
+Let's begin with the fundamentals! Module 1 will teach you about subagents - the foundation of Claude Code automation.
 
-<div style={{display: 'flex', gap: '1rem', margin: '2rem 0', flexWrap: 'wrap'}}>
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
 
 <a
   href="/docs/subagents/overview"
   style={{
-    padding: '1rem 1.5rem',
+    padding: '1rem 2rem',
     backgroundColor: 'var(--ifm-color-primary)',
     color: 'white',
     textDecoration: 'none',
     borderRadius: '8px',
     fontWeight: 'bold',
+    fontSize: '1.1rem',
     display: 'inline-block'
   }}
 >
-  🚀 Start Module 1: Subagents
+  Start Learning Claude Code
 </a>
 
 </div>
 
-:::tip Already have some experience?
-Feel free to jump to any module that interests you most. Each module is designed to be helpful on its own, though they do build on each other.
+:::tip
+New to Claude Code entirely? No problem! These tutorials assume you're starting from scratch. If you get stuck, each module has examples and troubleshooting tips.
 :::

@@ -17,7 +17,29 @@ The **Docusaurus Expert Agent** analyzes code changes and automatically:
 
 ## Agent flow in the workflow
 
-<img width="619" height="397" alt="Screenshot 2025-09-27 at 16 46 50" src="https://github.com/user-attachments/assets/21af30e2-844c-4481-b246-ea94b355aeeb" />
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="619"
+    height="397"
+    alt="Docusaurus Expert Agent workflow - automated documentation process from code changes to updated docs"
+    src="https://github.com/user-attachments/assets/21af30e2-844c-4481-b246-ea94b355aeeb"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Docusaurus Expert Agent workflow showing automated documentation updates
+  </p>
+</div>
 
 ## Installation
 

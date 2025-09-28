@@ -6,7 +6,29 @@ sidebar_position: 1
 
 > Build an automated documentation system that combines the Docusaurus Expert agent with Discord notifications in GitHub Actions.
 
-<img width="673" height="426" alt="Screenshot 2025-09-28 at 14 52 27" src="https://github.com/user-attachments/assets/a977ae40-8a78-4222-9578-4289fcfc0c71" />
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="673"
+    height="426"
+    alt="Complete CI/CD workflow overview - automated documentation system with Claude Code, GitHub Actions and Discord"
+    src="https://github.com/user-attachments/assets/a977ae40-8a78-4222-9578-4289fcfc0c71"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Complete automated documentation workflow combining Claude Code agents with CI/CD
+  </p>
+</div>
 
 ## What you'll build
 
@@ -20,6 +42,57 @@ By the end of this tutorial, you'll have a complete automated workflow that:
 
 This combines everything from the previous tutorials into a production-ready system.
 
+## Try with the example repository
+
+The easiest way to test this workflow is with our example repository:
+
+**Repository**: https://github.com/davila7/my-react-app
+
+### Quick setup
+
+1. **Clone the example repository**:
+```bash
+git clone https://github.com/davila7/my-react-app.git
+cd my-react-app
+```
+
+2. **Install dependencies**:
+```bash
+npm install
+```
+
+3. **Test the Docusaurus site**:
+```bash
+cd docs
+npm install
+npm start
+```
+
+4. **Create your own repository** from this template:
+   - Fork the repository on GitHub
+   - Or copy the files to your own new repository
+
+### Files to modify for your setup
+
+Once you have the repository, you'll need to modify these files:
+
+| File | What to change |
+|------|----------------|
+| `.github/workflows/docusaurus-auto-docs.yml` | Update branch names if needed (currently set to `main`) |
+| `docs/.claude/settings.json` | Add your Discord webhook URL in the `env` section |
+| Repository secrets | Add `ANTHROPIC_API_KEY` in GitHub Settings → Secrets |
+
+### Test files to modify
+
+To test the workflow, you can modify these example files:
+
+- `src/components/Button.js` - Add new props or methods
+- `src/utils/helpers.js` - Add new utility functions
+- `src/hooks/useCounter.js` - Modify the custom hook
+- Create new files in `src/` folder
+
+When you create a PR with changes to these files, the workflow will automatically update the documentation in the `docs/` folder.
+
 ## Prerequisites
 
 Before starting, make sure you have:
@@ -32,7 +105,29 @@ Before starting, make sure you have:
 
 ## Workflow architecture
 
-<img width="662" height="523" alt="Screenshot 2025-09-28 at 15 12 38" src="https://github.com/user-attachments/assets/79452a7e-15e8-4ceb-b8d0-a8e6968fd07f" />
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="662"
+    height="523"
+    alt="Workflow architecture diagram showing the flow from code changes to documentation updates and Discord notifications"
+    src="https://github.com/user-attachments/assets/79452a7e-15e8-4ceb-b8d0-a8e6968fd07f"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Workflow architecture showing automated documentation pipeline
+  </p>
+</div>
 
 ## Install Claude GitHub App
 
@@ -176,19 +271,46 @@ These permissions are required for the workflow to:
 
 ## Test the complete workflow
 
-Now let's test the entire system end-to-end:
+Now let's test the entire system end-to-end using the example repository:
 
 ### 1. Make a code change
 
-Create a new branch and modify a JavaScript/TypeScript file:
+If you're using the example repository `my-react-app`, modify one of the existing files:
 
 ```bash
+# Create a new branch
 git checkout -b feature/test-docs-automation
-echo "export function calculateTotal(items) { return items.reduce((sum, item) => sum + item.price, 0); }" > utils.js
-git add utils.js
-git commit -m "Add calculateTotal utility function"
+
+# Option A: Modify existing Button component
+echo "// Updated Button component with new prop
+export function Button({ children, variant = 'primary', size = 'medium' }) {
+  return (
+    <button className={\`btn btn-\${variant} btn-\${size}\`}>
+      {children}
+    </button>
+  );
+}" > src/components/Button.js
+
+# Option B: Add a new utility function
+echo "// New utility functions
+export function calculateTotal(items) {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+
+export function formatCurrency(amount) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount);
+}" > src/utils/helpers.js
+
+# Commit and push
+git add .
+git commit -m "Add new utility functions and update Button component"
 git push origin feature/test-docs-automation
 ```
+
+**For your own repository**: Modify any JavaScript/TypeScript files in your `src/` folder.
 
 ### 2. Create a pull request
 
@@ -200,7 +322,29 @@ git push origin feature/test-docs-automation
 
 1. Go to **Actions** tab in your repository
 
-<img width="859" height="424" alt="Screenshot 2025-09-28 at 16 03 44" src="https://github.com/user-attachments/assets/2779c79e-5805-4ba8-8ae9-f395e66da227" />
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="859"
+    height="424"
+    alt="GitHub Actions workflow execution showing Docusaurus Documentation Automation running"
+    src="https://github.com/user-attachments/assets/2779c79e-5805-4ba8-8ae9-f395e66da227"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    GitHub Actions workflow running the automated documentation process
+  </p>
+</div>
 
 2. Look for "Docusaurus Documentation Automation"
 3. Click on the running workflow to see live logs
@@ -216,15 +360,81 @@ As the workflow executes, you'll see Discord messages showing the agent's progre
 
 1. **🤖 Docusaurus Expert agent activated** - Agent starts analyzing the PR changes
 
-<img width="713" height="287" alt="Screenshot 2025-09-28 at 16 27 15" src="https://github.com/user-attachments/assets/0867e012-d005-4080-8fcd-e6cc38cea21f" />
+<div style={{textAlign: 'center', margin: '1rem 0'}}>
+  <img
+    width="713"
+    height="287"
+    alt="Discord notification showing Docusaurus Expert agent activation message"
+    src="https://github.com/user-attachments/assets/0867e012-d005-4080-8fcd-e6cc38cea21f"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Discord notification when Docusaurus Expert agent is activated
+  </p>
+</div>
    
 3. **📝 Agent documenting changes** - Messages as the agent reads files and understands what needs updating
 
-<img width="701" height="268" alt="Screenshot 2025-09-28 at 16 27 40" src="https://github.com/user-attachments/assets/77c7e628-cdc8-47a9-8608-091dc2d0373c" />
+<div style={{textAlign: 'center', margin: '1rem 0'}}>
+  <img
+    width="701"
+    height="268"
+    alt="Discord notification showing agent documenting changes and reading files"
+    src="https://github.com/user-attachments/assets/77c7e628-cdc8-47a9-8608-091dc2d0373c"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Agent analyzing files and documenting changes in real-time
+  </p>
+</div>
 
 4. **🔧 Agent running npm run build** - Agent ensures documentation builds correctly
 
-<img width="736" height="288" alt="Screenshot 2025-09-28 at 16 28 25" src="https://github.com/user-attachments/assets/8c118ba0-4ae1-4f00-9335-19b77fe20964" />
+<div style={{textAlign: 'center', margin: '1rem 0'}}>
+  <img
+    width="736"
+    height="288"
+    alt="Discord notification showing agent running npm build to validate documentation"
+    src="https://github.com/user-attachments/assets/8c118ba0-4ae1-4f00-9335-19b77fe20964"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Agent running build process to ensure documentation works correctly
+  </p>
+</div>
 
 5. **✅ Documentation validated** - Agent confirms the new docs work properly
 6. **📚 New PR created** - Final notification that a documentation PR has been generated
@@ -236,7 +446,29 @@ This gives your team real-time visibility into the automated documentation proce
 
 After the workflow completes:
 
-<img width="684" height="465" alt="Screenshot 2025-09-28 at 16 22 01" src="https://github.com/user-attachments/assets/d100a8a2-d3a3-431a-85ab-0c14a9a576b0" />
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <img
+    width="684"
+    height="465"
+    alt="Final workflow results showing generated documentation pull request"
+    src="https://github.com/user-attachments/assets/d100a8a2-d3a3-431a-85ab-0c14a9a576b0"
+    style={{
+      borderRadius: '8px',
+      border: '1px solid var(--ifm-color-emphasis-200)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      maxWidth: '100%',
+      height: 'auto'
+    }}
+  />
+  <p style={{
+    fontSize: '0.9rem',
+    color: 'var(--ifm-color-emphasis-600)',
+    marginTop: '0.5rem',
+    fontStyle: 'italic'
+  }}>
+    Completed workflow showing the generated documentation pull request
+  </p>
+</div>
 
 1. **Check for a new PR** with title "📚 Documentation Update"
 2. **Review the documentation changes** made by the agent
