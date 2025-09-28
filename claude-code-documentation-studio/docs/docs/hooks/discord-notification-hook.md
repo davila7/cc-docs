@@ -212,43 +212,13 @@ When Claude completes any tool (Write, Edit, Bash, etc.), the PostToolUse hook t
 # Result in Discord: "Write: component.js"
 ```
 
-### Example 2: When Claude runs a bash command
-
-When Claude executes a bash command, you'll see the command details:
-
-```json
-# User asks: "Install the dependencies"
-# Claude uses Bash tool to run npm install
-# PostToolUse hook receives via stdin:
-{
-  "hook_event_name": "PostToolUse",
-  "tool_name": "Bash",
-  "tool_input": {
-    "command": "npm install"
-  }
-}
-# Result in Discord: "Bash: npm"
-```
-
 ## Test the hook
 
 1. **Start Claude Code** in your project directory
 2. **Ask Claude to make a change**: "Create a test file called hello.txt with 'Hello World'"
 3. **Check Discord** - You should see a notification like:
 
-```
-🤖 Claude Code Activity
-Claude Code Agent completed a task
 
-⚡ Hook Event        🤖 Agent
-PostToolUse         Claude Code Agent
-
-📋 Activity
-Write: hello.txt
-
-📝 Details
-/your/project/hello.txt
-```
 
 ## Troubleshooting
 
