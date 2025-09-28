@@ -10,21 +10,9 @@ sidebar_position: 3
 
 This hook automatically sends Discord messages when Claude Code agents complete tasks, create PRs, or trigger specific events in your workflows.
 
-```mermaid
-graph LR
-    A[Claude Code Agent] --> B[PostToolUse Event]
-    B --> C[discord-notify.py Script]
-    C --> D[Get HOOK_EVENT variable]
-    D --> E[Discord Webhook]
-    E --> F[🔔 Discord Notification<br/>Shows: Hook Event + Agent + Activity]
+<img width="657" height="418" alt="Screenshot 2025-09-27 at 20 59 36" src="https://github.com/user-attachments/assets/bc21b49a-9946-4c83-b0f7-a49816274a71" />
 
-    style B fill:#f97316
-    style C fill:#5865F2
-    style D fill:#f97316
-    style F fill:#5865F2
-```
-
-## Step 1: Create Discord webhook
+## Create Discord webhook
 
 1. **Open Discord** → Go to your server
 2. **Right-click channel** → **Edit Channel** → **Integrations** → **Webhooks**
@@ -37,7 +25,7 @@ curl -X POST "YOUR_WEBHOOK_URL" \
   -d '{"content": "🧪 Test message"}'
 ```
 
-## Step 2: Add to GitHub Secrets
+## Add to GitHub Secrets
 
 GitHub repository → **Settings** → **Secrets and variables** → **Actions**
 
@@ -119,7 +107,7 @@ Make it executable:
 chmod +x .claude/hooks/discord-notify.py
 ```
 
-## Step 4: Test the hook
+## Test the hook
 
 Test with mock data:
 
