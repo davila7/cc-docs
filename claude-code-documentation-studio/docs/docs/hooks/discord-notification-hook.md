@@ -25,7 +25,9 @@ curl -X POST "YOUR_WEBHOOK_URL" \
   -d '{"content": "🧪 Test message"}'
 ```
 
-## Add to GitHub Secrets
+## GitHub Actions (Optional)
+
+If using with GitHub Actions, add the webhook URL as a repository secret:
 
 GitHub repository → **Settings** → **Secrets and variables** → **Actions**
 
@@ -35,13 +37,15 @@ Add secret:
 
 ## Step 3: Create the hook
 
-Create `.claude/hooks/discord-notify.py`:
+Create `.claude/hooks/discord-notifier.py` using only native Python libraries:
 
 ```python
 #!/usr/bin/env python3
 import os
-import requests
 import json
+import urllib.request
+import urllib.parse
+import sys
 from datetime import datetime
 
 def main():
@@ -50,12 +54,44 @@ def main():
         print("No Discord webhook configured")
         exit(0)
 
-    # Get activity info from environment
-    activity_title = os.getenv('ACTIVITY_TITLE', 'Claude Code agent completed task')
+    # Read hook data from stdin (Claude Code passes data this way)
+    try:
+        hook_data = json.load(sys.stdin)
+        hook_event = hook_data.get('hook_event_name', 'Unknown')
+        tool_name = hook_data.get('tool_name', 'Unknown Tool')
+
+        # Extract file path or command for context
+        tool_input = hook_data.get('tool_input', {})
+        file_path = tool_input.get('file_path', '')
+        command = tool_input.get('command', '')
+
+        # Determine agent name (Claude Code doesn't directly provide this)
+        agent_name = os.getenv('AGENT_NAME', 'Claude Code Agent')
+
+        # Create activity description based on tool and input
+        if file_path:
+            activity_details = file_path
+            activity_title = f"{tool_name}: {os.path.basename(file_path)}"
+        elif command:
+            activity_details = command[:100] + ('...' if len(command) > 100 else '')
+            activity_title = f"{tool_name}: {command.split()[0] if command.split() else 'command'}"
+        else:
+            activity_details = f"Tool: {tool_name}"
+            activity_title = f"Used {tool_name}"
+
+    except Exception as e:
+        # Fallback to environment variables
+        print(f"Debug: Failed to parse stdin JSON: {e}")
+        hook_event = os.getenv('HOOK_EVENT', 'PostToolUse')
+        tool_name = os.getenv('TOOL_NAME', 'Unknown Tool')
+        agent_name = os.getenv('AGENT_NAME', 'Claude Code Agent')
+        activity_title = os.getenv('ACTIVITY_TITLE', f'Used {tool_name}')
+        activity_details = os.getenv('ACTIVITY_DETAILS', f'Tool: {tool_name}')
+
+    # Get additional activity info from environment (can override defaults)
+    activity_title = os.getenv('ACTIVITY_TITLE', activity_title)
     activity_url = os.getenv('ACTIVITY_URL', '#')
-    activity_details = os.getenv('ACTIVITY_DETAILS', '').replace(' ', '\n')
-    agent_name = os.getenv('AGENT_NAME', 'Claude Code Agent')
-    hook_event = os.getenv('HOOK_EVENT', 'Unknown')
+    activity_details = os.getenv('ACTIVITY_DETAILS', activity_details)
 
     # Create Discord embed
     embed = {
@@ -85,16 +121,41 @@ def main():
         "timestamp": datetime.utcnow().isoformat()
     }
 
-    # Send to Discord
+    # Send to Discord using native urllib
     payload = {
         "embeds": [embed],
         "username": "Claude Code Bot"
     }
 
     try:
-        response = requests.post(webhook_url, json=payload, timeout=30)
-        response.raise_for_status()
-        print("✅ Discord notification sent")
+        # Convert payload to JSON and encode
+        data = json.dumps(payload).encode('utf-8')
+
+        # Debug: print payload size
+        print(f"Debug: Payload size: {len(data)} bytes")
+
+        # Create request with User-Agent header
+        req = urllib.request.Request(
+            webhook_url,
+            data=data,
+            headers={
+                'Content-Type': 'application/json',
+                'User-Agent': 'Claude-Code-Discord-Bot/1.0'
+            }
+        )
+
+        # Send request
+        with urllib.request.urlopen(req, timeout=30) as response:
+            if response.status == 200 or response.status == 204:
+                print("✅ Discord notification sent")
+            else:
+                print(f"❌ Discord API returned status: {response.status}")
+
+    except urllib.error.HTTPError as e:
+        print(f"❌ HTTP Error: {e.code} - {e.reason}")
+        if hasattr(e, 'read'):
+            error_body = e.read().decode('utf-8')
+            print(f"Error details: {error_body}")
     except Exception as e:
         print(f"❌ Error: {e}")
 
@@ -104,34 +165,90 @@ if __name__ == "__main__":
 
 Make it executable:
 ```bash
-chmod +x .claude/hooks/discord-notify.py
+chmod +x .claude/hooks/discord-notifier.py
+```
+
+## Step 4: Complete configuration
+
+Add both the hook and webhook URL to `.claude/settings.json`:
+
+```json
+{
+  "env": {
+    "DISCORD_WEBHOOK_URL": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
+  },
+  "hooks": {
+    "PostToolUse": [{
+      "hooks": [{"type": "command", "command": ".claude/hooks/discord-notifier.py"}]
+    }]
+  }
+}
+```
+
+**The script automatically extracts:**
+- `hook_event_name`: The hook event type (PostToolUse, Stop, etc.)
+- `tool_name`: The tool that was used (Read, Write, Edit, etc.)
+- `tool_input`: Parameters passed to the tool (file_path, command, etc.)
+
+
+## Examples of activation
+
+### When Claude finishes using a tool
+
+When Claude completes any tool (Write, Edit, Bash, etc.), the PostToolUse hook triggers:
+
+```json
+# User asks: "Create a new component file"
+# Claude uses Write tool to create component.js
+# PostToolUse hook receives via stdin:
+{
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/src/components/component.js",
+    "content": "import React from 'react'..."
+  }
+}
+# Result in Discord: "Write: component.js"
+```
+
+### Example 2: When Claude runs a bash command
+
+When Claude executes a bash command, you'll see the command details:
+
+```json
+# User asks: "Install the dependencies"
+# Claude uses Bash tool to run npm install
+# PostToolUse hook receives via stdin:
+{
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "npm install"
+  }
+}
+# Result in Discord: "Bash: npm"
 ```
 
 ## Test the hook
 
-Test with mock data:
+1. **Start Claude Code** in your project directory
+2. **Ask Claude to make a change**: "Create a test file called hello.txt with 'Hello World'"
+3. **Check Discord** - You should see a notification like:
 
-```bash
-export DISCORD_WEBHOOK_URL="your-webhook-url"
-export HOOK_EVENT="PostToolUse"
-export AGENT_NAME="Test Agent"
-export ACTIVITY_TITLE="Test agent activity"
-export ACTIVITY_URL="https://github.com/your-repo/pull/123"
-export ACTIVITY_DETAILS="test-file.js config.json"
-
-python3 .claude/hooks/discord-notify.py
 ```
+🤖 Claude Code Activity
+Claude Code Agent completed a task
 
-You should see a Discord message with:
-- **Title**: "🤖 Claude Code Activity"
-- **Hook Event**: `PostToolUse` (inline)
-- **Agent**: Test Agent (inline)
-- **Activity details** and **links**
-- **Bot username**: "Claude Code Bot"
+⚡ Hook Event        🤖 Agent
+PostToolUse         Claude Code Agent
 
-## Step 5: Add to workflow
+📋 Activity
+Write: hello.txt
 
-This general hook can be configured for any Claude Code agent workflow. You'll learn how to connect it specifically with the Docusaurus Expert agent in the [Complete Workflow](/docs/workflows/cicd-workflow) section.
+📝 Details
+/your/project/hello.txt
+```
 
 ## Troubleshooting
 
