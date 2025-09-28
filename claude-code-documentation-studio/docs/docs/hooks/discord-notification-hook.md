@@ -17,6 +17,8 @@ This hook automatically sends Discord messages when Claude Code agents complete 
 1. **Open Discord** → Go to your server
 2. **Right-click channel** → **Edit Channel** → **Integrations** → **Webhooks**
 3. **Create Webhook** → **Copy Webhook URL**
+4. 
+<img width="717" height="384" alt="Screenshot 2025-09-28 at 11 54 23" src="https://github.com/user-attachments/assets/d113b716-b4ad-4ed6-8a4f-0ed5e29a76a6" />
 
 Test it works:
 ```bash
@@ -218,7 +220,7 @@ When Claude completes any tool (Write, Edit, Bash, etc.), the PostToolUse hook t
 2. **Ask Claude to make a change**: "Create a test file called hello.txt with 'Hello World'"
 3. **Check Discord** - You should see a notification like:
 
-
+<img width="650" height="303" alt="Screenshot 2025-09-28 at 13 01 11" src="https://github.com/user-attachments/assets/2c0e2623-e50f-4413-92aa-ee8d2a84f1d1" />
 
 ## Troubleshooting
 
