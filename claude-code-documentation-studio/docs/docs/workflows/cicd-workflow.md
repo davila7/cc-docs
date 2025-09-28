@@ -242,8 +242,8 @@ With workflow configured:
 
 1. **Test** with real code change
 2. **Review** auto-generated PR
-3. **Configure** [Discord Setup](/docs/setup/discord-setup) if not done
-4. **Do** [Complete Testing](/docs/setup/testing) of system
+3. **Configure** [Discord Notifications Hook](/docs/hooks/discord-notification-hook) if not done
+4. **Test** the complete workflow with a real code change
 
 ---
 

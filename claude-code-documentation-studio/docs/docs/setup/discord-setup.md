@@ -205,7 +205,7 @@ With Discord configured:
 
 1. **Test** by making a real code change
 2. **Verify** you receive notification
-3. **Continue with** [Complete Testing](/docs/setup/testing)
+3. **Continue with** [Complete CI/CD Workflow](/docs/workflows/cicd-workflow)
 
 ---
 

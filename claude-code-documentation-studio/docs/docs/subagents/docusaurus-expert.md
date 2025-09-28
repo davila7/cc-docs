@@ -113,7 +113,7 @@ You can customize the agent by editing `.claude/agents/docusaurus-expert.md`:
 
 ## Next step
 
-Once the agent is installed, continue with [Discord Notifications Hook](/docs/hooks/hook-case-1) to set up automatic team notifications.
+Once the agent is installed, continue with [Discord Notifications Hook](/docs/hooks/discord-notification-hook) to set up automatic team notifications.
 
 ---
 
