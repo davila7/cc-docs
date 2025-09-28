@@ -316,7 +316,7 @@ git push origin feature/test-docs-automation
 
 1. Go to your GitHub repository
 2. Create a **Pull Request** from your feature branch to `main`
-3. The workflow will **automatically trigger**
+3. This automatically triggers the workflow
 
 ### 3. Monitor the workflow
 

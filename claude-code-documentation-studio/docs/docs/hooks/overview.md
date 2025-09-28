@@ -94,7 +94,7 @@ Your hook tells Claude what to do next based on its exit code:
 
 ## What's next?
 
-Now that you understand hooks basics, let's create a practical one:
+Now that you understand the basics of hooks, let's create a practical one:
 
 **[Discord Notifications Hook](/docs/hooks/discord-notification-hook)** - Get notified in Discord when the Docusaurus Expert agent updates your documentation.
 

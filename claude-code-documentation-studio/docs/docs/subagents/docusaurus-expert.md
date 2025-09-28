@@ -12,7 +12,7 @@ The **Docusaurus Expert Agent** analyzes code changes and automatically:
 
 - **Creates new documentation** for new functions
 - **Updates existing documentation** when code changes
-- **Maintains site navigation** up to date
+- **Keeps site navigation** up to date
 - **Applies consistent formatting** across all documents
 
 ## Agent flow in the workflow

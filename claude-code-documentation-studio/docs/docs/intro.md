@@ -32,7 +32,7 @@ Learn the basics of Claude Code's specialized assistants.
 [Start here →](/docs/subagents/overview)
 
 ### 2. Build a Documentation Assistant
-Create your first real subagent that helps with documentation.
+Create your first real subagent that helps with documentation. 
 
 **Time:** 15 minutes
 **What you'll build:** A working Docusaurus expert agent
@@ -56,7 +56,7 @@ Build a hook that sends team notifications to Discord.
 [Go to Module 4 →](/docs/hooks/discord-notification-hook)
 
 ### 5. Automate with GitHub Actions
-Connect everything together for a complete automation workflow.
+Put it all together for a complete automation workflow.
 
 **Time:** 30 minutes
 **What you'll build:** A full CI/CD pipeline with Claude Code
