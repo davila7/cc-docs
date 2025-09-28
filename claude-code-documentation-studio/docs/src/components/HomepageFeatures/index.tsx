@@ -15,34 +15,50 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Claude Code Hooks',
-    description: 'Event-Driven Automation',
-    details: 'Learn to create powerful hooks that automate your development workflow. Send Discord notifications, format code, and integrate with external services when Claude Code events occur.',
+    title: 'Subagents',
+    description: 'Foundation Concepts',
+    details: 'Learn the fundamentals of Claude Code subagents. Understand how specialized agents work, their capabilities, and how to configure them for your projects.',
     gradient: 'linear-gradient(135deg, #1a1a1a 0%, #f97316 100%)',
-    link: '/docs/hooks/overview',
-    type: 'Course'
+    link: '/docs/subagents/overview',
+    type: 'Module 1'
   },
   {
     title: 'Docusaurus Expert Agent',
-    description: 'Intelligent Documentation Assistant',
-    details: 'Master the specialized agent that automatically generates and maintains documentation. Transform code changes into comprehensive docs with real-world examples and best practices.',
+    description: 'Specialized Agent',
+    details: 'Master the documentation specialist agent. Learn to automate docs generation, configure advanced settings, and integrate with your development workflow.',
     gradient: 'linear-gradient(135deg, #2d2d2d 0%, #fb923c 100%)',
     link: '/docs/subagents/docusaurus-expert',
-    type: 'Course'
+    type: 'Module 2'
   },
   {
-    title: 'Complete CI/CD Workflow',
-    description: 'GitHub Actions Integration',
-    details: 'Build end-to-end automation pipelines that combine agents and hooks with GitHub Actions. Create documentation PRs automatically and notify your team through Discord.',
+    title: 'Hooks',
+    description: 'Event-Driven Automation',
+    details: 'Discover how to create powerful hooks that respond to Claude Code events. Build custom automation workflows and integrate with external services.',
     gradient: 'linear-gradient(135deg, #374151 0%, #fdba74 100%)',
+    link: '/docs/hooks/overview',
+    type: 'Module 3'
+  },
+  {
+    title: 'Discord Notification Hook',
+    description: 'Team Communication',
+    details: 'Build a practical Discord notification system. Learn to create hooks that send real-time updates to your team when agents complete tasks.',
+    gradient: 'linear-gradient(135deg, #4b5563 0%, #fbbf24 100%)',
+    link: '/docs/hooks/discord-notification-hook',
+    type: 'Module 4'
+  },
+  {
+    title: 'CI/CD Workflow',
+    description: 'Complete Integration',
+    details: 'Combine everything into a production-ready CI/CD pipeline. Automate documentation updates and team notifications with GitHub Actions.',
+    gradient: 'linear-gradient(135deg, #6b7280 0%, #f59e0b 100%)',
     link: '/docs/workflows/cicd-workflow',
-    type: 'Workflow'
+    type: 'Module 5'
   },
 ];
 
 function Feature({title, description, details, gradient, link, type}: FeatureItem) {
   return (
-    <div className={clsx('col col--4', styles.feature)}>
+    <div className={styles.featureWrapper}>
       <Link to={link} className={styles.featureLink}>
         <div className={styles.featureCard} style={{background: gradient}}>
           <div className={styles.featureContent}>
@@ -65,13 +81,13 @@ export default function HomepageFeatures(): ReactNode {
       <div className="container">
         <div className="text--center margin-bottom--xl">
           <Heading as="h2" className={styles.sectionTitle}>
-            Master Documentation Automation
+            Start Your Claude Code Journey
           </Heading>
           <p className={styles.sectionSubtitle}>
-            Learn to build intelligent workflows that keep your documentation always up-to-date
+            Take our progressive courses and master Claude Code step by step. More advanced courses coming soon!
           </p>
         </div>
-        <div className="row">
+        <div className={styles.featuresGrid}>
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
           ))}
