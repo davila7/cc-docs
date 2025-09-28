@@ -2,249 +2,418 @@
 sidebar_position: 1
 ---
 
-# GitHub Actions Workflow
+# Complete CI/CD Workflow
 
-> Complete workflow that runs the Docusaurus Expert agent and sends Discord notifications automatically.
+> Build an automated documentation system that combines the Docusaurus Expert agent with Discord notifications in GitHub Actions.
 
-## What does this workflow do?
+## What you'll build
 
-1. **Triggers** when you create a PR with code changes
-2. **Installs** the Docusaurus Expert agent automatically
+By the end of this tutorial, you'll have a complete automated workflow that:
+
+1. **Detects code changes** in pull requests
+2. **Automatically installs** the Docusaurus Expert agent
 3. **Analyzes changes** and updates documentation
-4. **Creates a PR** with documentation updates
-5. **Notifies Discord** team about changes
+4. **Creates a documentation PR** with the updates
+5. **Sends Discord notifications** to your team
+
+This combines everything from the previous tutorials into a production-ready system.
+
+## Prerequisites
+
+Before starting, make sure you have:
+
+- ✅ **Docusaurus Expert Agent** knowledge - see [Docusaurus Expert Agent](/docs/subagents/docusaurus-expert)
+- ✅ **Discord notifications** setup - see [Discord Notification Hook](/docs/hooks/discord-notification-hook)
+- ✅ **GitHub repository** with Claude Code access
+- ✅ **Anthropic API key** from [console.anthropic.com](https://console.anthropic.com)
 
 ## Workflow architecture
 
 ```mermaid
 graph LR
-    A[Code change] --> B[PR created]
-    B --> C[GitHub Actions]
-    C --> D[Agent analyzes]
-    D --> E[Docs updated]
-    E --> F[Docs PR created]
-    F --> G[Discord notifies]
+    A[Code Change] --> B[Pull Request]
+    B --> C[GitHub Actions Trigger]
+    C --> D[Install Docusaurus Expert]
+    D --> E[Create Discord Hook]
+    E --> F[Analyze Code Changes]
+    F --> G[Update Documentation]
+    G --> H[Create Docs PR]
+    H --> I[Send Discord Notification]
+
+    style D fill:#f97316
+    style E fill:#5865F2
+    style I fill:#5865F2
 ```
 
-## Workflow installation
+## Step 1: Install Claude GitHub App
 
-### 1. Create workflow file
+First, you need to install the Claude GitHub App to allow Claude Code to interact with your repository:
 
-Create `.github/workflows/docusaurus-auto-docs.yml`:
+1. **In your Claude Code terminal**, run:
+   ```bash
+   /install-github-app
+   ```
+
+2. **Authenticate** with your GitHub account
+3. **Install the Claude app** - You can authorize all repositories or select specific ones
+4. **Complete the installation** back in the console
+5. **Configure permissions** - Choose if you want PR reviews or @claude tagging
+
+## Step 2: Create the workflow file
+
+Create `.github/workflows/docusaurus-auto-docs.yml` in your repository:
 
 ```yaml title=".github/workflows/docusaurus-auto-docs.yml"
-name: Automatic Documentation
+name: Docusaurus Documentation Automation
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main  # Change to your default branch
     paths:
+      # Add file types that should trigger documentation updates
       - '**.js'
       - '**.ts'
+      - '**.jsx'
+      - '**.tsx'
       - '**.py'
-      - '!docs/**'  # IMPORTANT: Prevents infinite loops
+      - '**.java'
+      # Exclude paths that shouldn't trigger documentation
+      - '!.github/**'
+      - '!**/node_modules/**'
+      - '!**/dist/**'
+      - '!**/build/**'
+      - '!docs/**'  # CRITICAL: Prevents infinite loops
 
 jobs:
-  auto-docs:
+  auto-document:
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Full history needed for proper diff
 
-      - name: Install agent
+      # Install the Docusaurus Expert agent
+      - name: Setup Claude configuration
         run: |
           mkdir -p .claude/agents .claude/hooks
+          # Install agent if not exists
           if [ ! -f ".claude/agents/docusaurus-expert.md" ]; then
             npx claude-code-templates@latest \
-              --agent documentation/docusaurus-expert --yes
+              --agent documentation/docusaurus-expert \
+              --yes \
+              --directory .
           fi
 
-      - name: Create Discord hook
+      # Create the Discord notification hook
+      - name: Create Discord notification hook
         run: |
-          cat > .claude/hooks/discord-notify.py << 'EOF'
+          cat > .claude/hooks/discord-notifier.py << 'EOF'
           #!/usr/bin/env python3
-          import os, requests, json
+          import os
+          import json
+          import urllib.request
+          import urllib.parse
           from datetime import datetime
 
-          webhook = os.getenv('DISCORD_WEBHOOK_URL')
-          if not webhook: exit(0)
+          def main():
+              webhook_url = os.getenv('DISCORD_WEBHOOK_URL')
+              if not webhook_url:
+                  print("No Discord webhook configured")
+                  exit(0)
 
-          embed = {
-              "title": "📚 Documentation updated",
-              "description": "The agent created a documentation PR",
-              "color": 0x5865F2,
-              "timestamp": datetime.utcnow().isoformat(),
-              "fields": [{
-                  "name": "Files changed",
-                  "value": f"```\n{os.getenv('CHANGED_FILES', '')}\n```"
-              }]
-          }
+              changed_files = os.getenv('CHANGED_FILES', '')
+              pr_url = os.getenv('PR_URL', '#')
 
-          requests.post(webhook, json={"embeds": [embed]}, timeout=30)
-          print("✅ Notification sent")
+              embed = {
+                  "title": "📚 Documentation Updated",
+                  "description": "Docusaurus Expert agent created a documentation PR",
+                  "color": 0x5865F2,
+                  "fields": [
+                      {
+                          "name": "🔗 Pull Request",
+                          "value": f"[View Documentation PR]({pr_url})"
+                      },
+                      {
+                          "name": "📂 Files Changed",
+                          "value": f"```\n{changed_files}\n```"
+                      }
+                  ],
+                  "timestamp": datetime.utcnow().isoformat()
+              }
+
+              payload = {
+                  "embeds": [embed],
+                  "username": "Documentation Bot"
+              }
+
+              try:
+                  data = json.dumps(payload).encode('utf-8')
+                  req = urllib.request.Request(
+                      webhook_url,
+                      data=data,
+                      headers={
+                          'Content-Type': 'application/json',
+                          'User-Agent': 'Claude-Code-Discord-Bot/1.0'
+                      }
+                  )
+
+                  with urllib.request.urlopen(req, timeout=30) as response:
+                      if response.status == 200 or response.status == 204:
+                          print("✅ Discord notification sent")
+                      else:
+                          print(f"❌ Discord API returned status: {response.status}")
+
+              except Exception as e:
+                  print(f"❌ Error: {e}")
+
+          if __name__ == "__main__":
+              main()
           EOF
 
-          chmod +x .claude/hooks/discord-notify.py
+          chmod +x .claude/hooks/discord-notifier.py
 
-      - name: Detect changes
-        id: changes
+      # Get changed files for context
+      - name: Get changed files
+        id: changed
         run: |
-          FILES=$(git diff --name-only HEAD~1 | tr '\n' ' ')
-          echo "files=$FILES" >> $GITHUB_OUTPUT
+          # Fetch the base branch
+          git fetch origin ${'{{ github.event.pull_request.base.ref }}'}:${'{{ github.event.pull_request.base.ref }}'}
 
-      - name: Run agent
+          # Get changed files and save to output
+          CHANGED_FILES=$(git diff --name-only ${'{{ github.event.pull_request.base.ref }}'}...HEAD | tr '\n' ' ')
+          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+
+      # Execute Claude Code with the Docusaurus Expert agent
+      - name: Update documentation
         uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          anthropic_api_key: ${'{{ secrets.ANTHROPIC_API_KEY }}'}
           prompt: |
-            Use the docusaurus-expert agent to update documentation.
+            Read and follow the instructions in .claude/agents/docusaurus-expert.md
 
-            Changed files: ${{ steps.changes.outputs.files }}
+            Changed files in this pull request:
+            ${'{{ steps.changed.outputs.files }}'}
 
-            Instructions:
-            1. Analyze changes in these files
-            2. Create/update relevant documentation
-            3. Maintain consistent style
-            4. Include code examples
+            ## Requirements
+            1. Find the Docusaurus documentation (check: docs/, docu/, documentation/, website/docs/)
+            2. Update documentation for any changed functionality
+            3. Add new documentation for new features
+            4. Update API references if function signatures changed
+            5. Ensure all code examples match the current implementation
 
-      - name: Create PR
+            ## Project-specific rules
+            - Documentation language: English
+            - Code examples should include TypeScript types where applicable
+            - Follow existing documentation structure and style
+            - Update getting-started.md for new features
+            - Create feature-specific documentation files when appropriate
+
+            Focus on documenting the changes found in the modified files above.
+          claude_args: "--max-turns 15 --dangerously-skip-permissions"
+
+      # Create PR with documentation updates
+      - name: Create Documentation Pull Request
+        id: create-pr
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "📚 Docs updated automatically"
+          token: ${'{{ secrets.GITHUB_TOKEN }}'}
+          commit-message: "docs: update via docusaurus-expert agent"
+          title: "📚 Documentation Update"
           body: |
-            Documentation updated by Docusaurus Expert agent.
+            Automated documentation update based on pull request changes.
 
-            Changes based on: ${{ steps.changes.outputs.files }}
-          branch: docs/auto-update
-          commit-message: "docs: automatic update"
+            **Changed files:**
+            ```
+            ${'{{ steps.changed.outputs.files }}'}
+            ```
 
-      - name: Notify Discord
+            This PR was automatically generated by the Docusaurus Expert agent.
+          branch: docs/auto-${'{{ github.sha }}'}
+          base: main
+
+      # Send Discord notification
+      - name: Send Discord notification
+        if: steps.create-pr.outputs.pull-request-number
         run: |
-          export DISCORD_WEBHOOK_URL="${{ secrets.DISCORD_WEBHOOK_URL }}"
-          export CHANGED_FILES="${{ steps.changes.outputs.files }}"
-          python3 .claude/hooks/discord-notify.py
+          export DISCORD_WEBHOOK_URL="${'{{ secrets.DISCORD_WEBHOOK_URL }}'}"
+          export CHANGED_FILES="${'{{ steps.changed.outputs.files }}'}"
+          export PR_URL="${'{{ steps.create-pr.outputs.pull-request-url }}'}"
+          python3 .claude/hooks/discord-notifier.py
 ```
 
-### 2. Configure GitHub secrets
+## Step 3: Configure GitHub secrets
 
-Go to **Settings → Secrets and variables → Actions** and add:
+Go to your repository **Settings → Secrets and variables → Actions** and add these secrets:
 
-| Secret | Value |
-|---------|-------|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key |
-| `DISCORD_WEBHOOK_URL` | Discord webhook URL |
+### Required secrets:
 
-### 3. Enable permissions
+| Secret Name | Where to get it | Purpose |
+|-------------|-----------------|----------|
+| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Allows Claude Code to run in GitHub Actions |
+| `DISCORD_WEBHOOK_URL` | Your Discord server webhook | Sends notifications to Discord |
 
-In **Settings → Actions → General → Workflow permissions**:
+### How to get your Discord webhook:
+If you haven't created one yet, follow the [Discord Notification Hook guide](/docs/hooks/discord-notification-hook#create-discord-webhook).
 
-- ✅ Read repository contents and packages permissions
-- ✅ Allow GitHub Actions to create and approve pull requests
+## Step 4: Enable workflow permissions
 
-## How it works
+In your repository **Settings → Actions → General → Workflow permissions**:
 
-### Automatic trigger
-```yaml
-on:
-  pull_request:
-    branches: [main]
-    paths:
-      - '**.js'      # JavaScript files
-      - '**.ts'      # TypeScript files
-      - '**.py'      # Python files
-      - '!docs/**'   # Exclude docs folder (prevents loops)
+1. ✅ **Read repository contents and packages permissions**
+2. ✅ **Allow GitHub Actions to create and approve pull requests**
+
+These permissions are required for the workflow to:
+- Read your code changes
+- Create documentation pull requests
+- Comment on existing pull requests
+
+## Step 5: Test the complete workflow
+
+Now let's test the entire system end-to-end:
+
+### 1. Make a code change
+
+Create a new branch and modify a JavaScript/TypeScript file:
+
+```bash
+git checkout -b feature/test-docs-automation
+echo "export function calculateTotal(items) { return items.reduce((sum, item) => sum + item.price, 0); }" > utils.js
+git add utils.js
+git commit -m "Add calculateTotal utility function"
+git push origin feature/test-docs-automation
 ```
 
-### Workflow steps
+### 2. Create a pull request
 
-1. **Checkout**: Downloads complete code
-2. **Install agent**: Installs docusaurus-expert if doesn't exist
-3. **Discord hook**: Creates notification script
-4. **Detect changes**: Lists modified files
-5. **Run agent**: Claude analyzes and updates docs
-6. **Create PR**: New PR with updated documentation
-7. **Notify**: Sends message to Discord
+1. Go to your GitHub repository
+2. Create a **Pull Request** from your feature branch to `main`
+3. The workflow will **automatically trigger**
 
-## Customization
+### 3. Monitor the workflow
 
-### For different languages
+1. Go to **Actions** tab in your repository
+2. Look for "Docusaurus Documentation Automation"
+3. Click on the running workflow to see live logs
+4. Watch each step execute:
+   - ✅ Setup Claude configuration
+   - ✅ Create Discord notification hook
+   - ✅ Get changed files
+   - ✅ Update documentation
+   - ✅ Create Documentation Pull Request
+   - ✅ Send Discord notification
+
+### 4. Review the results
+
+After the workflow completes:
+
+1. **Check for a new PR** with title "📚 Documentation Update"
+2. **Review the documentation changes** made by the agent
+3. **Check Discord** for the notification message
+4. **Merge the documentation PR** if the changes look good
+
+## Workflow breakdown
+
+Here's what happens in each step:
+
+### 🔧 **Setup Phase**
+- **Checkout**: Downloads your repository code
+- **Install Agent**: Automatically installs Docusaurus Expert agent
+- **Create Hook**: Generates Discord notification script
+
+### 📊 **Analysis Phase**
+- **Detect Changes**: Identifies which files were modified
+- **Context Building**: Prepares information for the agent
+
+### 🤖 **Agent Execution**
+- **Run Claude Code**: Executes Docusaurus Expert with your changes
+- **Analyze Code**: Agent understands what documentation needs updating
+- **Update Docs**: Creates or modifies documentation files
+
+### 📝 **Results Phase**
+- **Create PR**: Generates a pull request with documentation updates
+- **Notify Team**: Sends Discord message with PR link and changed files
+
+## Customization options
+
+### Add more file types to monitor:
 ```yaml
 paths:
-  - '**.java'    # Java
-  - '**.go'      # Go
-  - '**.php'     # PHP
-  - '**.rb'      # Ruby
+  - '**.java'    # Java files
+  - '**.go'      # Go files
+  - '**.php'     # PHP files
+  - '**.rb'      # Ruby files
 ```
 
-### For multiple branches
+### Monitor multiple branches:
 ```yaml
 on:
   pull_request:
     branches: [main, develop, staging]
 ```
 
-### Specific exclusions
+### Exclude specific paths:
 ```yaml
 paths:
-  - '!tests/**'      # Exclude tests
-  - '!*.config.js'   # Exclude configs
-  - '!package*.json' # Exclude packages
+  - '!tests/**'        # Ignore test files
+  - '!*.config.js'     # Ignore config files
+  - '!package*.json'   # Ignore package files
 ```
-
-## Testing
-
-### Activate workflow
-
-1. Make changes to a `.js` or `.ts` file
-2. Commit and push to a branch
-3. Create PR to `main`
-4. Workflow will run automatically
-
-### Verify execution
-
-1. Go to **Actions** in your repo
-2. Look for "Automatic Documentation"
-3. Review logs for each step
-4. Verify docs PR was created
-5. Check Discord notification
 
 ## Troubleshooting
 
-### Workflow doesn't run
+### ❌ Workflow doesn't trigger
+
+**Check your file paths:**
 ```bash
-# Verify changed files match the paths
-git diff --name-only HEAD~1
+# Make sure your changes match the workflow paths
+git diff --name-only origin/main
 ```
 
-### API key error
-```bash
-# Verify secret is configured
-# GitHub → Settings → Secrets → ANTHROPIC_API_KEY
-```
+### ❌ Anthropic API key error
 
-### Discord doesn't notify
+1. Verify the secret exists: **Settings → Secrets → ANTHROPIC_API_KEY**
+2. Check the key is valid at [console.anthropic.com](https://console.anthropic.com)
+3. Make sure you have API credits available
+
+### ❌ Discord notification fails
+
+Test your webhook manually:
 ```bash
-# Test webhook manually
 curl -X POST "YOUR_WEBHOOK_URL" \
   -H "Content-Type: application/json" \
-  -d '{"content": "Test"}'
+  -d '{"content": "🧪 Test message from workflow"}'
 ```
 
-## Next steps
+### ❌ Permission errors
 
-With workflow configured:
+1. Check **Settings → Actions → General → Workflow permissions**
+2. Enable "Allow GitHub Actions to create and approve pull requests"
+3. Verify the GitHub token has proper permissions
 
-1. **Test** with real code change
-2. **Review** auto-generated PR
-3. **Configure** [Discord Notifications Hook](/docs/hooks/discord-notification-hook) if not done
-4. **Test** the complete workflow with a real code change
+## What's next?
+
+Congratulations! You now have a complete automated documentation system. Here's what you can do next:
+
+1. **Customize the agent prompt** for your specific project needs
+2. **Add more file types** to monitor for changes
+3. **Set up team reviewers** for documentation PRs
+4. **Create additional hooks** for other notifications (Slack, email, etc.)
+5. **Monitor and refine** the documentation quality over time
+
+## Key benefits achieved
+
+✅ **Zero-maintenance documentation** - Updates automatically with code changes
+✅ **Team notifications** - Everyone knows when docs are updated
+✅ **Quality control** - Review documentation changes before merging
+✅ **Consistent style** - Agent follows your documentation patterns
+✅ **Complete integration** - Works seamlessly with your existing workflow
 
 ---
 
-*Workflow ready! Your documentation will update automatically with every code change.*
+*Your automated documentation system is now live! Every code change will trigger documentation updates and team notifications.*

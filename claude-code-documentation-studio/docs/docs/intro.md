@@ -1,84 +1,101 @@
 ---
 sidebar_position: 1
 slug: /
-title: "Claude Code Documentation Studio"
-description: "Learn to implement intelligent documentation automation using Claude Code Subagents and Hooks with Docusaurus, GitHub Actions, and Discord notifications"
-keywords: [claude-code, subagents, hooks, documentation, automation, docusaurus, github-actions]
+title: "Claude Code Academy"
+description: "Learn Claude Code components, use cases, and production workflows through hands-on tutorials"
+keywords: [claude-code, academy, subagents, hooks, automation, workflows, github-actions]
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Claude Code Documentation Studio
+# Claude Code Academy
 
-Welcome to the **Claude Code Documentation Studio** - your comprehensive guide to implementing intelligent documentation automation workflows.
+Welcome to Claude Code Academy! Learn Claude Code's powerful features through hands-on tutorials that teach you to build real-world automation workflows. No complex setup required - just follow along and master Claude Code step by step.
 
-:::info Course Overview
-This tutorial provides step-by-step instructions for implementing intelligent documentation automation using **Claude Code Subagents** and **Hooks** integrated with Docusaurus, GitHub Actions, and Discord notifications.
-:::
+## What You'll Learn
 
-## Architecture Overview
+In Claude Code Academy, you'll master the core components of Claude Code through practical projects:
 
-<img width="683" height="466" alt="Screenshot 2025-09-27 at 16 56 05" src="https://github.com/user-attachments/assets/586a21a9-3242-4db8-81fe-abaf6e430ec1" />
+- **Subagents**: Specialized AI assistants that handle specific tasks
+- **Hooks**: Event-driven automation that responds to your actions
+- **Workflows**: Complete CI/CD integration with GitHub Actions
+- **Real-world patterns**: Production-ready automation strategies
 
-## Prerequisites
+You'll build a complete automated documentation system that demonstrates all these concepts working together!
 
-:::warning Requirements Check
-Before implementing this automated documentation system, ensure you have:
-:::
+## Academy Modules
+
+Claude Code Academy has **5 progressive modules** that teach you Claude Code from fundamentals to advanced workflows:
+
+### Module 1: Subagents (Foundation)
+**What you'll do:** Learn what subagents are and how they work
+**Time:** 15-20 minutes
+**You'll learn:** The core concepts behind Claude Code's specialized agents
+
+[Start Module 1: Subagents →](/docs/subagents/overview)
+
+### Module 2: Docusaurus Expert Agent
+**What you'll do:** Set up a specialized agent for documentation automation
+**Time:** 10-15 minutes
+**You'll learn:** How to configure and use a real-world subagent
+
+[Go to Module 2: Docusaurus Expert →](/docs/subagents/docusaurus-expert)
+
+### Module 3: Hooks (Event Automation)
+**What you'll do:** Learn how hooks respond to Claude Code events
+**Time:** 20-25 minutes
+**You'll learn:** Event-driven automation fundamentals in Claude Code
+
+[Go to Module 3: Hooks →](/docs/hooks/overview)
+
+### Module 4: Discord Notification Hook
+**What you'll do:** Build a practical hook that sends Discord notifications
+**Time:** 15-20 minutes
+**You'll learn:** How to create custom hooks for team communication
+
+[Go to Module 4: Discord Notifications →](/docs/hooks/discord-notification-hook)
+
+### Module 5: CI/CD Workflow
+**What you'll do:** Integrate everything with GitHub Actions for production workflows
+**Time:** 25-30 minutes
+**You'll learn:** How to build complete automation pipelines with Claude Code
+
+[Go to Module 5: CI/CD Workflow →](/docs/workflows/cicd-workflow)
+
+## What You Need to Get Started
+
+Don't worry - you don't need much to begin:
 
 <Tabs>
-<TabItem value="account" label="🔑 Account Access">
+<TabItem value="essential" label="✅ Must Have">
 
-- **Claude Code Account**: Functional Claude Code installation with valid API access
-- **Anthropic API Key**: Valid API key for Claude Code agent execution in CI/CD environment
-
-</TabItem>
-<TabItem value="repository" label="📁 Repository Setup">
-
-- **GitHub Repository**: Repository with admin or write permissions where documentation will be managed
-- **GitHub Actions Access**: Permissions to create and execute GitHub Actions workflows in your repository
+- **Claude Code account** (if you're reading this, you probably have one!)
+- **GitHub repository** where you want automated docs
+- **Basic familiarity** with GitHub (you know how to push code)
 
 </TabItem>
-<TabItem value="optional" label="🔧 Optional Tools">
+<TabItem value="optional" label="📱 Nice to Have">
 
-- **Discord Server**: For automated notifications (optional but recommended)
-- **Docusaurus Site**: For documentation hosting (can be set up during tutorial)
+- **Discord server** (for team notifications)
+- **Docusaurus site** (we can set this up together if needed)
 
 </TabItem>
 </Tabs>
 
-## Course Structure
+## How Claude Code Academy Works
 
-This course follows three progressive stages:
+Each module is designed to be:
+- **Quick to complete** (15-30 minutes each)
+- **Immediately useful** (you'll see results right away)
+- **Easy to follow** (step-by-step instructions with examples)
+- **Practical** (real Claude Code patterns you can use anywhere)
 
-### 🤖 Stage 1: Subagents
-Configure specialized agents for documentation validation, GitHub integration, and Discord notifications.
+You can complete all 5 modules in one sitting (about 2 hours total) or learn at your own pace.
 
-### 🪝 Stage 2: Hooks
-Implement automation triggers for pre-tool validation and post-completion notifications.
+## Ready to Start?
 
-### 🔄 Stage 3: Workflows
-Deploy complete CI/CD pipeline with GitHub Actions and Discord integration.
-
-## Learning Outcomes
-
-:::success What You'll Build
-Upon completion, you will have implemented a production-ready automated documentation system featuring:
-:::
-
-- ✅ **Quality Validation**: Automated documentation quality checks before commits
-- ✅ **Intelligent Generation**: Updates via GitHub Actions using Claude Code agents
-- ✅ **Team Notifications**: Discord integration for documentation change alerts
-- ✅ **Continuous Sync**: Automatic synchronization between code and documentation
-
-This tutorial provides practical implementation of **AI-driven development workflows** for maintaining high-quality project documentation with minimal manual intervention.
-
-## Quick Start
-
-:::note Ready to Begin?
-Choose your starting point based on your current setup and experience level.
-:::
+The best way to learn Claude Code is by doing! Let's begin with Module 1 where you'll learn about subagents.
 
 <div style={{display: 'flex', gap: '1rem', margin: '2rem 0', flexWrap: 'wrap'}}>
 
@@ -94,83 +111,11 @@ Choose your starting point based on your current setup and experience level.
     display: 'inline-block'
   }}
 >
-  🚀 Start with Subagents
-</a>
-
-<a
-  href="/docs/hooks/overview"
-  style={{
-    padding: '1rem 1.5rem',
-    backgroundColor: 'var(--ifm-color-secondary)',
-    color: 'white',
-    textDecoration: 'none',
-    borderRadius: '8px',
-    fontWeight: 'bold',
-    display: 'inline-block'
-  }}
->
-  🪝 Jump to Hooks
-</a>
-
-<a
-  href="/docs/workflows/cicd-workflow"
-  style={{
-    padding: '1rem 1.5rem',
-    backgroundColor: 'var(--ifm-color-success)',
-    color: 'white',
-    textDecoration: 'none',
-    borderRadius: '8px',
-    fontWeight: 'bold',
-    display: 'inline-block'
-  }}
->
-  🔄 Go to Workflows
+  🚀 Start Module 1: Subagents
 </a>
 
 </div>
 
-## Essential Resources
-
-:::info External Documentation
-These resources provide additional context and detailed reference information.
+:::tip Already have some experience?
+Feel free to jump to any module that interests you most. Each module is designed to be helpful on its own, though they do build on each other.
 :::
-
-<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', margin: '2rem 0'}}>
-
-<div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
-
-**🤖 Claude Code**
-- [Subagents Guide](https://docs.claude.com/en/docs/claude-code/sub-agents)
-- [Hooks Documentation](https://docs.claude.com/en/docs/claude-code/hooks-guide)
-
-</div>
-
-<div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
-
-**📚 Documentation Tools**
-- [Docusaurus Documentation](https://docusaurus.io/docs)
-- [GitHub Actions Guide](https://docs.github.com/en/actions)
-
-</div>
-
-<div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
-
-**🔧 Repositories & Templates**
-- [AITMPL Agent Repository](https://github.com/anthropics/aitmpl)
-- [Docusaurus Expert Agent](https://github.com/anthropics/docusaurus-agent)
-
-</div>
-
-<div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
-
-**💬 Integration APIs**
-- [Discord Webhooks](https://discord.com/developers/docs/resources/webhook)
-- [GitHub REST API](https://docs.github.com/en/rest)
-
-</div>
-
-</div>
-
----
-
-*Ready to transform your documentation workflow? Let's start with [Subagents Overview](/docs/subagents/overview) to configure your first Claude Code agent.*
