@@ -6,6 +6,8 @@ sidebar_position: 1
 
 > Build an automated documentation system that combines the Docusaurus Expert agent with Discord notifications in GitHub Actions.
 
+<img width="673" height="426" alt="Screenshot 2025-09-28 at 14 52 27" src="https://github.com/user-attachments/assets/a977ae40-8a78-4222-9578-4289fcfc0c71" />
+
 ## What you'll build
 
 By the end of this tutorial, you'll have a complete automated workflow that:
@@ -29,21 +31,7 @@ Before starting, make sure you have:
 
 ## Workflow architecture
 
-```mermaid
-graph LR
-    A[Code Change] --> B[Pull Request]
-    B --> C[GitHub Actions Trigger]
-    C --> D[Install Docusaurus Expert]
-    D --> E[Create Discord Hook]
-    E --> F[Analyze Code Changes]
-    F --> G[Update Documentation]
-    G --> H[Create Docs PR]
-    H --> I[Send Discord Notification]
-
-    style D fill:#f97316
-    style E fill:#5865F2
-    style I fill:#5865F2
-```
+<img width="662" height="523" alt="Screenshot 2025-09-28 at 15 12 38" src="https://github.com/user-attachments/assets/79452a7e-15e8-4ceb-b8d0-a8e6968fd07f" />
 
 ## Step 1: Install Claude GitHub App
 
