@@ -36,7 +36,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: '🔄 Workflows',
       items: [
-        'workflows/cicd-workflow',
+        'workflows/cicd-workflow'
       ],
     }
   ],

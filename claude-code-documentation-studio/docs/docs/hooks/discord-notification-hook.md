@@ -37,7 +37,7 @@ Add secret:
 - **Name**: `DISCORD_WEBHOOK_URL`
 - **Value**: Your webhook URL
 
-## Step 3: Create the hook
+## Create the hook
 
 Create `.claude/hooks/discord-notifier.py` using only native Python libraries:
 
@@ -170,7 +170,7 @@ Make it executable:
 chmod +x .claude/hooks/discord-notifier.py
 ```
 
-## Step 4: Complete configuration
+## Complete configuration
 
 Add both the hook and webhook URL to `.claude/settings.json`:
 
