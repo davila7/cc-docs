@@ -199,6 +199,9 @@ git push origin feature/test-docs-automation
 ### 3. Monitor the workflow
 
 1. Go to **Actions** tab in your repository
+
+<img width="859" height="424" alt="Screenshot 2025-09-28 at 16 03 44" src="https://github.com/user-attachments/assets/2779c79e-5805-4ba8-8ae9-f395e66da227" />
+
 2. Look for "Docusaurus Documentation Automation"
 3. Click on the running workflow to see live logs
 4. Watch each step execute:
@@ -212,77 +215,32 @@ git push origin feature/test-docs-automation
 As the workflow executes, you'll see Discord messages showing the agent's progress:
 
 1. **🤖 Docusaurus Expert agent activated** - Agent starts analyzing the PR changes
-2. **📝 Agent documenting changes** - Messages as the agent reads files and understands what needs updating
-3. **🔧 Agent running npm run build** - Agent ensures documentation builds correctly
-4. **✅ Documentation validated** - Agent confirms the new docs work properly
-5. **📚 New PR created** - Final notification that a documentation PR has been generated
+
+<img width="713" height="287" alt="Screenshot 2025-09-28 at 16 27 15" src="https://github.com/user-attachments/assets/0867e012-d005-4080-8fcd-e6cc38cea21f" />
+   
+3. **📝 Agent documenting changes** - Messages as the agent reads files and understands what needs updating
+
+<img width="701" height="268" alt="Screenshot 2025-09-28 at 16 27 40" src="https://github.com/user-attachments/assets/77c7e628-cdc8-47a9-8608-091dc2d0373c" />
+
+4. **🔧 Agent running npm run build** - Agent ensures documentation builds correctly
+
+<img width="736" height="288" alt="Screenshot 2025-09-28 at 16 28 25" src="https://github.com/user-attachments/assets/8c118ba0-4ae1-4f00-9335-19b77fe20964" />
+
+5. **✅ Documentation validated** - Agent confirms the new docs work properly
+6. **📚 New PR created** - Final notification that a documentation PR has been generated
 
 This gives your team real-time visibility into the automated documentation process!
 
-**Example Discord notifications you'll see:**
-- `🔍 Reading changed files: utils.js, components/Header.tsx`
-- `📖 Analyzing function: calculateTotal`
-- `✍️ Writing documentation for new utility functions`
-- `🧪 Running npm run build to validate documentation`
-- `✅ Documentation build successful`
-- `📋 Creating pull request with documentation updates`
 
 ### 5. Review the results
 
 After the workflow completes:
 
+<img width="684" height="465" alt="Screenshot 2025-09-28 at 16 22 01" src="https://github.com/user-attachments/assets/d100a8a2-d3a3-431a-85ab-0c14a9a576b0" />
+
 1. **Check for a new PR** with title "📚 Documentation Update"
 2. **Review the documentation changes** made by the agent
-3. **Check Discord** for the notification message
 4. **Merge the documentation PR** if the changes look good
-
-## Workflow breakdown
-
-Here's what happens in each step:
-
-### 🔧 **Setup Phase**
-- **Checkout**: Downloads your repository code
-- **Install Agent**: Automatically installs Docusaurus Expert agent (if not already in project)
-- **Hook Ready**: Uses the Discord notification hook already configured in your `.claude/hooks/` folder
-
-### 📊 **Analysis Phase**
-- **Detect Changes**: Identifies which files were modified
-- **Context Building**: Prepares information for the agent
-
-### 🤖 **Agent Execution**
-- **Run Claude Code**: Executes Docusaurus Expert with your changes
-- **Analyze Code**: Agent understands what documentation needs updating
-- **Update Docs**: Creates or modifies documentation files
-
-### 📝 **Results Phase**
-- **Create PR**: Generates a pull request with documentation updates
-- **Auto Notifications**: Discord hook automatically notifies team when tools are executed
-
-## Customization options
-
-### Add more file types to monitor:
-```yaml
-paths:
-  - '**.java'    # Java files
-  - '**.go'      # Go files
-  - '**.php'     # PHP files
-  - '**.rb'      # Ruby files
-```
-
-### Monitor multiple branches:
-```yaml
-on:
-  pull_request:
-    branches: [main, develop, staging]
-```
-
-### Exclude specific paths:
-```yaml
-paths:
-  - '!tests/**'        # Ignore test files
-  - '!*.config.js'     # Ignore config files
-  - '!package*.json'   # Ignore package files
-```
 
 ## Troubleshooting
 
