@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Hooks
+# Overview
 
 > Automate actions when Claude Code events happen - like sending notifications when documentation is updated.
 
