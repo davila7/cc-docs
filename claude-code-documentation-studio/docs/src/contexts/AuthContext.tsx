@@ -38,10 +38,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGitHub = async () => {
+    // Get the current origin (works in both dev and prod)
+    const redirectUrl = `${window.location.origin}/auth/callback`;
+    console.log('Redirect URL:', redirectUrl);
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: redirectUrl,
+        skipBrowserRedirect: false,
       },
     });
 
