@@ -4,7 +4,11 @@
       "Bash(npx create-docusaurus:*)",
       "Bash(rm:*)",
       "Read(//var/folders/r4/mykdhct5247dlp3mr7h5488m0000gn/T/TemporaryItems/NSIRD_screencaptureui_QTiGj1/**)",
-      "Read(//var/folders/r4/mykdhct5247dlp3mr7h5488m0000gn/T/TemporaryItems/NSIRD_screencaptureui_2qS9YL/**)"
+      "Read(//var/folders/r4/mykdhct5247dlp3mr7h5488m0000gn/T/TemporaryItems/NSIRD_screencaptureui_2qS9YL/**)",
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
