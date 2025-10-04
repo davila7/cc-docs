@@ -18,25 +18,32 @@ const sidebars: SidebarsConfig = {
     'intro',
     {
       type: 'category',
-      label: '🤖 Subagents',
+      label: '📚 Claude Code Course',
+      collapsed: false,
       items: [
-        'subagents/overview',
-        'subagents/docusaurus-expert'
-      ],
-    },
-    {
-      type: 'category',
-      label: '🪝 Hooks',
-      items: [
-        'hooks/overview',
-        'hooks/discord-notification-hook'
-      ],
-    },
-    {
-      type: 'category',
-      label: '🔄 Workflows',
-      items: [
-        'workflows/cicd-workflow'
+        {
+          type: 'category',
+          label: '🤖 Subagents',
+          items: [
+            'subagents/overview',
+            'subagents/docusaurus-expert'
+          ],
+        },
+        {
+          type: 'category',
+          label: '🪝 Hooks',
+          items: [
+            'hooks/overview',
+            'hooks/discord-notification-hook'
+          ],
+        },
+        {
+          type: 'category',
+          label: '⚡ Workflows',
+          items: [
+            'workflows/cicd-workflow'
+          ],
+        }
       ],
     }
   ],

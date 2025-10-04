@@ -1,0 +1,164 @@
+/* Terminal Auth Button */
+.authButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.loading {
+  color: var(--terminal-text-secondary);
+  font-size: 0.85rem;
+}
+
+.loading::before {
+  content: '> ';
+  color: var(--terminal-text-accent);
+}
+
+.loading::after {
+  content: '_';
+  animation: terminal-blink 1s infinite;
+  margin-left: 0.25rem;
+  color: var(--terminal-text-accent);
+}
+
+@keyframes terminal-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Profile Button */
+.profileButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--terminal-border-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--terminal-text-primary);
+}
+
+.profileButton:hover {
+  background: var(--terminal-bg-tertiary);
+  border-color: var(--terminal-text-accent);
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--terminal-text-accent);
+}
+
+.username {
+  font-weight: 500;
+  font-size: 0.9rem;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownIcon {
+  transition: transform 0.2s ease;
+}
+
+.dropdownIconOpen {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 1rem;
+  background: var(--terminal-bg-elevated);
+  border: 1px solid var(--terminal-border-primary);
+  border-radius: 6px;
+  box-shadow: var(--terminal-shadow-lg);
+  min-width: 200px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--terminal-text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background: var(--terminal-bg-tertiary);
+  color: var(--terminal-text-accent);
+}
+
+.dropdownItem svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.dropdownItem:hover svg {
+  opacity: 1;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: var(--terminal-border-primary);
+  margin: 0.25rem 0;
+}
+
+/* Terminal Sign-In Button */
+.signInButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  background: var(--terminal-bg-tertiary);
+  color: var(--terminal-text-accent);
+  border: 1px solid var(--terminal-border-accent);
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  box-shadow: var(--terminal-shadow-sm);
+}
+
+.signInButton:hover {
+  background: var(--terminal-text-accent);
+  color: #000000;
+  transform: translateY(-1px);
+  box-shadow: var(--terminal-shadow-accent);
+}
+
+.githubIcon {
+  flex-shrink: 0;
+}
+
+@media (max-width: 996px) {
+  .authButton {
+    padding: 0.5rem;
+  }
+
+  .username {
+    display: none;
+  }
+
+  .dropdown {
+    right: 0.5rem;
+  }
+}

@@ -1,33 +1,68 @@
 /**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
+ * Terminal-Inspired Homepage Styles
  */
 
+/* Terminal Hero Banner */
 .heroBanner {
   padding: 6rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-  color: white;
+  background: var(--terminal-bg-primary);
+  color: var(--terminal-text-primary);
+  border-bottom: 2px solid var(--terminal-border-accent);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.heroBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--terminal-text-accent) 0%,
+    var(--terminal-text-warning) 50%,
+    var(--terminal-text-accent) 100%
+  );
+  animation: terminal-scan 3s infinite;
+}
+
+@keyframes terminal-scan {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .heroBanner .hero__title {
   font-size: 3.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #ffffff 0%, #f97316 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--terminal-text-accent);
+  font-family: var(--ifm-font-family-monospace);
+  letter-spacing: -1px;
+}
+
+.heroBanner .hero__title::before {
+  content: '$ ';
+  color: var(--terminal-text-accent);
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 .heroBanner .hero__subtitle {
   font-size: 1.25rem;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto 2.5rem auto;
-  line-height: 1.6;
-  color: #d1d5db;
+  line-height: 1.8;
+  color: var(--terminal-text-secondary);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.heroBanner .hero__subtitle::before {
+  content: '> ';
+  color: var(--terminal-text-accent);
 }
 
 @media screen and (max-width: 996px) {
@@ -44,35 +79,48 @@
   }
 }
 
+/* Terminal Buttons */
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }
 
 .buttons .button {
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 8px;
-  background-color: #f97316;
-  border: 2px solid #f97316;
-  color: white;
-  transition: all 0.3s ease;
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 4px;
+  background-color: var(--terminal-bg-tertiary);
+  border: 1px solid var(--terminal-border-accent);
+  color: var(--terminal-text-accent);
+  transition: all 0.2s ease;
+  font-family: var(--ifm-font-family-monospace);
+  position: relative;
+  box-shadow: var(--terminal-shadow-sm);
+}
+
+.buttons .button::before {
+  content: '> ';
+  color: var(--terminal-text-accent);
+  margin-right: 0.5rem;
+  font-weight: 700;
 }
 
 .buttons .button:hover {
-  background-color: #ea580c;
-  border-color: #ea580c;
+  background-color: var(--terminal-text-accent);
+  border-color: var(--terminal-text-accent);
+  color: #000000;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(249, 115, 22, 0.3);
-  color: white;
+  box-shadow: var(--terminal-shadow-accent);
 }
 
-/* FAQ Section Styles */
+/* Terminal FAQ Section */
 .faqSection {
   padding: 4rem 0;
-  background-color: #ffffff;
+  background-color: var(--terminal-bg-secondary);
+  font-family: var(--ifm-font-family-monospace);
 }
 
 .faqTitle {
@@ -80,17 +128,29 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #1a1a1a;
+  color: var(--terminal-text-accent);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.faqTitle::before {
+  content: '$ ';
+  color: var(--terminal-text-accent);
 }
 
 .faqSubtitle {
   text-align: center;
   font-size: 1.1rem;
-  color: #6b7280;
+  color: var(--terminal-text-secondary);
   margin-bottom: 3rem;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.faqSubtitle::before {
+  content: '> ';
+  color: var(--terminal-text-accent);
 }
 
 .accordionContainer {
@@ -99,44 +159,58 @@
 }
 
 .accordionItem {
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--terminal-border-primary);
+  background: var(--terminal-bg-elevated);
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .accordionButton {
   width: 100%;
-  padding: 1.5rem 0;
-  background: none;
-  border: none;
+  padding: 1.25rem 1.5rem;
+  background: var(--terminal-bg-tertiary);
+  border: 1px solid var(--terminal-border-primary);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
   text-align: left;
   transition: all 0.2s ease;
+  font-family: var(--ifm-font-family-monospace);
 }
 
 .accordionButton:hover {
-  background-color: #f9fafb;
+  background-color: var(--terminal-bg-primary);
+  border-color: var(--terminal-border-accent);
 }
 
 .accordionQuestion {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #374151;
-  line-height: 1.4;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--terminal-text-primary);
+  line-height: 1.5;
   flex: 1;
   margin-right: 1rem;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.accordionQuestion::before {
+  content: '> ';
+  color: var(--terminal-text-accent);
+  margin-right: 0.5rem;
 }
 
 .accordionIcon {
   font-size: 0.8rem;
-  color: #9ca3af;
+  color: var(--terminal-text-secondary);
   transition: transform 0.2s ease;
   transform: rotate(180deg);
 }
 
 .accordionIconOpen {
   transform: rotate(0deg);
+  color: var(--terminal-text-accent);
 }
 
 .accordionContent {
@@ -146,36 +220,49 @@
 }
 
 .accordionContentOpen {
-  max-height: 200px;
+  max-height: 300px;
 }
 
 .accordionAnswer {
-  padding: 0 0 1.5rem 0;
-  color: #6b7280;
-  line-height: 1.6;
-  font-size: 1rem;
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  color: var(--terminal-text-secondary);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  background: var(--terminal-bg-primary);
+  border-top: 1px solid var(--terminal-border-primary);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.accordionAnswer::before {
+  content: '⎿ ';
+  color: var(--terminal-border-secondary);
+  margin-right: 0.5rem;
 }
 
 .faqFooter {
   text-align: center;
   padding-top: 2rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--terminal-border-primary);
+  margin-top: 2rem;
 }
 
 .faqFooter p {
-  color: #6b7280;
+  color: var(--terminal-text-secondary);
   margin: 0;
+  font-family: var(--ifm-font-family-monospace);
 }
 
 .faqFooter a {
-  color: #f97316;
-  font-weight: 600;
+  color: var(--terminal-text-accent);
+  font-weight: 700;
   text-decoration: none;
+  font-family: var(--ifm-font-family-monospace);
 }
 
 .faqFooter a:hover {
-  color: #ea580c;
+  color: #fb923c;
   text-decoration: underline;
+  text-decoration-style: dotted;
 }
 
 @media screen and (max-width: 996px) {

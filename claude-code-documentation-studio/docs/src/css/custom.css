@@ -1,30 +1,124 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Custom theme for Claude Code Templates
+ * Orange accent with dark theme
  */
 
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  /* Primary Colors - Orange Accent */
+  --ifm-color-primary: #f97316;
+  --ifm-color-primary-dark: #ea580c;
+  --ifm-color-primary-darker: #dc2626;
+  --ifm-color-primary-darkest: #b91c1c;
+  --ifm-color-primary-light: #fb923c;
+  --ifm-color-primary-lighter: #fdba74;
+  --ifm-color-primary-lightest: #fed7aa;
+
+  /* Terminal Variables for Custom Pages (profile, home, etc) */
+  --terminal-bg-primary: #0f0f0f;
+  --terminal-bg-secondary: #1a1a1a;
+  --terminal-bg-tertiary: #2a2a2a;
+  --terminal-bg-elevated: #1f1f1f;
+  --terminal-text-primary: #ffffff;
+  --terminal-text-secondary: #a0a0a0;
+  --terminal-text-muted: #707070;
+  --terminal-text-accent: #f97316;
+  --terminal-text-success: #10b981;
+  --terminal-text-warning: #f59e0b;
+  --terminal-text-error: #ef4444;
+  --terminal-border-primary: #404040;
+  --terminal-border-secondary: #606060;
+  --terminal-border-accent: #f97316;
+  --terminal-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --terminal-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --terminal-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --terminal-shadow-accent: 0 0 20px rgba(249, 115, 22, 0.3);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+/* Dark Theme */
+html[data-theme='dark'] {
+  --ifm-color-primary: #f97316;
+  --ifm-color-primary-dark: #ea580c;
+  --ifm-color-primary-darker: #dc2626;
+  --ifm-color-primary-darkest: #b91c1c;
+  --ifm-color-primary-light: #fb923c;
+  --ifm-color-primary-lighter: #fdba74;
+  --ifm-color-primary-lightest: #fed7aa;
+}
+
+/* Terminal Animations - Available for custom components */
+@keyframes terminal-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes terminal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Terminal Utility Classes - Only for custom pages */
+.terminal-prompt {
+  color: var(--terminal-text-accent);
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+.terminal-cursor::after {
+  content: '_';
+  animation: terminal-blink 1s infinite;
+  color: var(--terminal-text-accent);
+}
+
+/* Navbar Improvements */
+.navbar {
+  background-color: #0a0a0a !important;
+  border-bottom: 2px solid var(--ifm-color-primary);
+}
+
+.navbar__title {
+  color: #ffffff !important;
+}
+
+.navbar__link {
+  transition: all 0.2s ease;
+  color: #a0a0a0 !important;
+}
+
+.navbar__link:hover {
+  color: var(--ifm-color-primary) !important;
+}
+
+.navbar__link--active {
+  color: var(--ifm-color-primary) !important;
+}
+
+/* Theme Toggle Button in Navbar */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--terminal-border-primary);
+  border-radius: 4px;
+  color: #a0a0a0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 0.5rem;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--terminal-bg-tertiary);
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.theme-toggle-btn svg {
+  display: block;
 }

@@ -5,9 +5,15 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Claude Code Documentation Studio',
-  tagline: 'Professional Documentation Tools for AI Development Workflows',
+  title: 'Claude Code Templates',
+  tagline: 'Open Source Templates and Documentation for Claude Code Development',
   favicon: 'img/favicon.ico',
+
+  // Custom fields for environment variables
+  customFields: {
+    supabaseUrl: process.env.REACT_APP_SUPABASE_URL || '',
+    supabaseAnonKey: process.env.REACT_APP_SUPABASE_ANON_KEY || '',
+  },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -15,15 +21,15 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://anthropic.github.io',
+  url: 'https://davila7.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'anthropic', // Usually your GitHub org/user name.
-  projectName: 'claude-code-documentation-studio', // Usually your repo name.
+  organizationName: 'davila7', // Usually your GitHub org/user name.
+  projectName: 'claude-code-templates', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -44,7 +50,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/anthropic/claude-code-documentation-studio/tree/main/docs/',
+            'https://github.com/davila7/claude-code-templates/tree/main/docs/',
         },
         blog: {
           showReadingTime: true,
@@ -55,7 +61,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/anthropic/claude-code-documentation-studio/tree/main/docs/',
+            'https://github.com/davila7/claude-code-templates/tree/main/docs/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -72,27 +78,19 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     colorMode: {
-      respectPrefersColorScheme: true,
+      defaultMode: 'dark',
+      disableSwitch: false, // Enable theme toggle
+      respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'Claude Code Academy',
-      logo: {
-        alt: 'Claude Code Logo',
-        src: 'img/logo.svg',
-      },
-      items: [
-        {
-          href: 'https://github.com/anthropic/claude-code-documentation-studio',
-          label: 'GitHub',
-          position: 'right',
-        },
-      ],
+      title: '$ Claude Code Templates',
+      items: [],
     },
     footer: {
       style: 'dark',
       links: [
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Anthropic. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Claude Code Templates. Open Source Project. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

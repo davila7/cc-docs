@@ -1,8 +1,25 @@
-# Website
+# Claude Code Academy Documentation
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator, with integrated GitHub authentication powered by Supabase.
+
+## 🔐 Authentication
+
+This site includes a complete GitHub OAuth authentication system. See the [Authentication Quick Start](./AUTHENTICATION_QUICKSTART.md) guide to set it up.
+
+**Features:**
+- ✅ GitHub OAuth login
+- ✅ User profiles with GitHub data
+- ✅ Persistent sessions
+- ✅ Protected routes ready
+- ✅ Avatar and user metadata
 
 ## Installation
+
+```bash
+npm install
+```
+
+or
 
 ```bash
 yarn

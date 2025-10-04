@@ -1,0 +1,427 @@
+/* Terminal Progress Dashboard */
+.dashboard {
+  background: var(--terminal-bg-elevated);
+  border-radius: 8px;
+  padding: 2rem;
+  border: 1px solid var(--terminal-border-primary);
+  height: 100%;
+  box-shadow: var(--terminal-shadow-md);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.dashboardTitle {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  color: var(--terminal-text-accent);
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+  border-bottom: 2px solid var(--terminal-border-accent);
+  padding-bottom: 0.75rem;
+}
+
+.dashboardTitle::before {
+  content: '$ ';
+  color: var(--terminal-text-accent);
+  margin-right: 0.5rem;
+}
+
+.dashboardTitle::after {
+  content: ' --progress';
+  color: var(--terminal-text-secondary);
+  font-size: 1rem;
+}
+
+.courseList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Terminal Accordion Styles */
+.courseAccordion {
+  border: 1px solid var(--terminal-border-primary);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  background: var(--terminal-bg-secondary);
+}
+
+.courseAccordion:hover {
+  border-color: var(--terminal-border-accent);
+  box-shadow: var(--terminal-shadow-accent);
+  transform: translateX(4px);
+}
+
+/* Terminal Course Header */
+.courseHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem;
+  background: var(--terminal-bg-tertiary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.courseHeader:hover {
+  background: var(--terminal-bg-primary);
+}
+
+.courseHeaderExpanded {
+  background: var(--terminal-bg-primary);
+  border-bottom: 1px solid var(--terminal-border-accent);
+}
+
+.courseHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.courseHeaderLeft::before {
+  content: '>';
+  color: var(--terminal-text-accent);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.courseIcon {
+  font-size: 1.75rem;
+  line-height: 1;
+  filter: grayscale(20%);
+}
+
+.courseInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.courseName {
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--terminal-text-accent);
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+  letter-spacing: -0.25px;
+}
+
+.courseStats {
+  font-size: 0.8rem;
+  color: var(--terminal-text-secondary);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.courseStats::before {
+  content: '[ ';
+  color: var(--terminal-border-secondary);
+}
+
+.courseStats::after {
+  content: ' ]';
+  color: var(--terminal-border-secondary);
+}
+
+.courseHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.courseProgressCompact {
+  width: 120px;
+}
+
+.expandIcon {
+  color: var(--terminal-text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.expandIconOpen {
+  transform: rotate(180deg);
+  color: var(--terminal-text-accent);
+}
+
+/* Terminal Course Content */
+.courseContent {
+  padding: 1.5rem;
+  background: var(--terminal-bg-secondary);
+  animation: terminal-slide-in 0.3s ease-out;
+}
+
+@keyframes terminal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.overallProgress {
+  margin-bottom: 2rem;
+  padding: 1.25rem;
+  background: var(--terminal-bg-tertiary);
+  border-radius: 4px;
+  border: 1px solid var(--terminal-border-primary);
+  border-left: 3px solid var(--terminal-text-accent);
+}
+
+.overallProgress h4 {
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+  color: var(--terminal-text-accent);
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.overallProgress h4::before {
+  content: '$ ';
+  color: var(--terminal-text-accent);
+}
+
+.modules h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: var(--terminal-text-accent);
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+}
+
+.modules h4::before {
+  content: '> ';
+  color: var(--terminal-text-accent);
+  margin-right: 0.5rem;
+}
+
+/* Terminal Module Card */
+.moduleCard {
+  padding: 1rem;
+  background: var(--terminal-bg-primary);
+  border: 1px solid var(--terminal-border-primary);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.moduleCard::before {
+  content: '|';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--terminal-border-secondary);
+  font-weight: 700;
+}
+
+.moduleCard:last-child {
+  margin-bottom: 0;
+}
+
+.moduleCard:hover {
+  border-color: var(--terminal-border-accent);
+  background: var(--terminal-bg-tertiary);
+  transform: translateX(6px);
+  box-shadow: var(--terminal-shadow-sm);
+}
+
+.moduleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.moduleInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.moduleIcon {
+  font-size: 1.25rem;
+  line-height: 1;
+  filter: grayscale(20%);
+}
+
+.moduleName {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+  color: var(--terminal-text-primary);
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 600;
+}
+
+.modulePages {
+  font-size: 0.7rem;
+  color: var(--terminal-text-secondary);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.modulePages::before {
+  content: '( ';
+  color: var(--terminal-border-secondary);
+}
+
+.modulePages::after {
+  content: ' )';
+  color: var(--terminal-border-secondary);
+}
+
+/* Terminal Completed Badge */
+.completedBadge {
+  background: var(--terminal-bg-tertiary);
+  color: var(--terminal-text-success);
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--ifm-font-family-monospace);
+  border: 1px solid var(--terminal-text-success);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.completedBadge::before {
+  content: '✓ ';
+}
+
+.moduleProgress {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.lastVisited {
+  font-size: 0.7rem;
+  color: var(--terminal-text-muted);
+  display: block;
+  font-family: var(--ifm-font-family-monospace);
+  padding-left: 1.5rem;
+}
+
+.lastVisited::before {
+  content: '⎿ ';
+  color: var(--terminal-border-secondary);
+  margin-right: 0.25rem;
+}
+
+/* Terminal Loading & Empty States */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--terminal-text-secondary);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.loading::before {
+  content: '> ';
+  color: var(--terminal-text-accent);
+}
+
+.loading::after {
+  content: '_';
+  animation: terminal-blink 1s infinite;
+  margin-left: 0.25rem;
+  color: var(--terminal-text-accent);
+}
+
+@keyframes terminal-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--terminal-text-secondary);
+  background: var(--terminal-bg-tertiary);
+  border: 1px dashed var(--terminal-border-primary);
+  border-radius: 4px;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.emptyState h2 {
+  margin-bottom: 1.5rem;
+  color: var(--terminal-text-accent);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.emptyState h2::before {
+  content: '$ ';
+  color: var(--terminal-text-accent);
+}
+
+.emptyState p {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: var(--terminal-text-secondary);
+}
+
+.emptyStateHint {
+  font-size: 0.8rem;
+  color: var(--terminal-text-muted);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.emptyStateHint::before {
+  content: '⎿ ';
+  color: var(--terminal-border-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1.5rem;
+  }
+
+  .dashboardTitle {
+    font-size: 1.5rem;
+  }
+
+  .courseHeader {
+    padding: 1rem;
+  }
+
+  .courseIcon {
+    font-size: 1.5rem;
+  }
+
+  .courseName {
+    font-size: 1.125rem;
+  }
+
+  .courseStats {
+    font-size: 0.75rem;
+  }
+
+  .courseProgressCompact {
+    display: none;
+  }
+
+  .courseContent {
+    padding: 1rem;
+  }
+
+  .moduleCard {
+    padding: 1rem;
+  }
+
+  .moduleIcon {
+    font-size: 1.25rem;
+  }
+
+  .moduleName {
+    font-size: 0.9rem;
+  }
+}

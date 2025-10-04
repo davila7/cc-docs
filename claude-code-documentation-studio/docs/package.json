@@ -1,7 +1,7 @@
 {
-  "name": "claude-code-advanced-patterns-docs",
+  "name": "claude-code-templates",
   "version": "1.0.0",
-  "description": "Advanced Claude Code Subagents and Hooks Integration Patterns Documentation",
+  "description": "Claude Code Templates - Open Source Documentation and Templates for Claude Code Development",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -26,6 +26,9 @@
     "@docusaurus/core": "3.9.1",
     "@docusaurus/preset-classic": "3.9.1",
     "@mdx-js/react": "^3.0.0",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.58.0",
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
@@ -67,13 +70,14 @@
     "hooks",
     "workflow-automation",
     "documentation",
-    "anthropic"
+    "templates",
+    "opensource"
   ],
-  "author": "Anthropic Technical Documentation Team",
+  "author": "Claude Code Templates Contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anthropic/claude-code-agents-hooks-advanced.git"
+    "url": "https://github.com/davila7/claude-code-templates.git"
   },
-  "homepage": "https://anthropic.github.io/claude-code-agents-hooks-advanced/"
+  "homepage": "https://davila7.github.io/claude-code-templates/"
 }
